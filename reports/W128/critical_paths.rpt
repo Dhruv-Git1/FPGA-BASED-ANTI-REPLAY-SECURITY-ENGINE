@@ -1,0 +1,317 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2024.2 (win64) Build 5239630 Fri Nov 08 22:35:27 MST 2024
+| Date         : Sun Oct 25 16:15:37 2026
+| Host         : hp running 64-bit major release  (build 9200)
+| Command      : report_timing -max_paths 5 -nworst 1 -path_type full -file reports/W128/critical_paths.rpt
+| Design       : top_zedboard
+| Device       : 7z020-clg484
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+| Design State : Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             0.862ns  (required time - arrival time)
+  Source:                 u_auth/pkt_r_reg[80]/C
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_window/mask_reg[91]/CE
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             sys_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (sys_clk rise@10.000ns - sys_clk rise@0.000ns)
+  Data Path Delay:        8.639ns  (logic 2.495ns (28.881%)  route 6.144ns (71.119%))
+  Logic Levels:           8  (CARRY4=1 LUT2=1 LUT5=1 LUT6=2 MUXF7=2 MUXF8=1)
+  Clock Path Skew:        -0.057ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    5.104ns = ( 15.104 - 10.000 ) 
+    Source Clock Delay      (SCD):    5.555ns
+    Clock Pessimism Removal (CPR):    0.394ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock sys_clk rise edge)    0.000     0.000 r  
+                         propagated clock network latency
+                                                      5.555     5.555    
+    SLICE_X104Y34        FDRE                         0.000     5.555 r  u_auth/pkt_r_reg[80]/C
+    SLICE_X104Y34        FDRE (Prop_fdre_C_Q)         0.518     6.073 r  u_auth/pkt_r_reg[80]/Q
+                         net (fo=10, routed)          0.900     6.974    u_window/seq[0]
+    SLICE_X106Y30        LUT2 (Prop_lut2_I1_O)        0.124     7.098 r  u_window/mask[127]_i_70/O
+                         net (fo=1, routed)           0.000     7.098    u_window/mask[127]_i_70_n_0
+    SLICE_X106Y30        CARRY4 (Prop_carry4_S[0]_O[1])
+                                                      0.424     7.522 r  u_window/mask_reg[127]_i_24/O[1]
+                         net (fo=160, routed)         1.567     9.089    u_window/mask_reg[127]_i_24_n_6
+    SLICE_X100Y8         LUT6 (Prop_lut6_I2_O)        0.303     9.392 f  u_window/reason[0]_i_105/O
+                         net (fo=1, routed)           0.000     9.392    u_window/reason[0]_i_105_n_0
+    SLICE_X100Y8         MUXF7 (Prop_muxf7_I0_O)      0.209     9.601 f  u_window/reason_reg[0]_i_52/O
+                         net (fo=1, routed)           0.000     9.601    u_window/reason_reg[0]_i_52_n_0
+    SLICE_X100Y8         MUXF8 (Prop_muxf8_I1_O)      0.088     9.689 f  u_window/reason_reg[0]_i_22/O
+                         net (fo=1, routed)           0.852    10.541    u_window/reason_reg[0]_i_22_n_0
+    SLICE_X103Y13        LUT6 (Prop_lut6_I3_O)        0.319    10.860 f  u_window/reason[0]_i_7/O
+                         net (fo=1, routed)           0.000    10.860    u_window/reason[0]_i_7_n_0
+    SLICE_X103Y13        MUXF7 (Prop_muxf7_I1_O)      0.217    11.077 f  u_window/reason_reg[0]_i_2/O
+                         net (fo=3, routed)           1.225    12.302    u_window/seen
+    SLICE_X105Y33        LUT5 (Prop_lut5_I2_O)        0.293    12.595 r  u_window/mask[127]_i_2/O
+                         net (fo=128, routed)         1.600    14.194    u_window/mask
+    SLICE_X99Y7          FDRE                                         r  u_window/mask_reg[91]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock sys_clk rise edge)   10.000    10.000 r  
+                         propagated clock network latency
+                                                      5.104    15.104    
+                         clock pessimism              0.394    15.498    
+                         clock uncertainty           -0.035    15.463    
+    SLICE_X99Y7          FDRE (Setup_fdre_C_CE)      -0.407    15.056    u_window/mask_reg[91]
+  -------------------------------------------------------------------
+                         required time                         15.056    
+                         arrival time                         -14.194    
+  -------------------------------------------------------------------
+                         slack                                  0.862    
+
+Slack (MET) :             0.888ns  (required time - arrival time)
+  Source:                 u_auth/pkt_r_reg[80]/C
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_window/mask_reg[101]/CE
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             sys_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (sys_clk rise@10.000ns - sys_clk rise@0.000ns)
+  Data Path Delay:        8.613ns  (logic 2.495ns (28.967%)  route 6.118ns (71.033%))
+  Logic Levels:           8  (CARRY4=1 LUT2=1 LUT5=1 LUT6=2 MUXF7=2 MUXF8=1)
+  Clock Path Skew:        -0.056ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    5.105ns = ( 15.105 - 10.000 ) 
+    Source Clock Delay      (SCD):    5.555ns
+    Clock Pessimism Removal (CPR):    0.394ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock sys_clk rise edge)    0.000     0.000 r  
+                         propagated clock network latency
+                                                      5.555     5.555    
+    SLICE_X104Y34        FDRE                         0.000     5.555 r  u_auth/pkt_r_reg[80]/C
+    SLICE_X104Y34        FDRE (Prop_fdre_C_Q)         0.518     6.073 r  u_auth/pkt_r_reg[80]/Q
+                         net (fo=10, routed)          0.900     6.974    u_window/seq[0]
+    SLICE_X106Y30        LUT2 (Prop_lut2_I1_O)        0.124     7.098 r  u_window/mask[127]_i_70/O
+                         net (fo=1, routed)           0.000     7.098    u_window/mask[127]_i_70_n_0
+    SLICE_X106Y30        CARRY4 (Prop_carry4_S[0]_O[1])
+                                                      0.424     7.522 r  u_window/mask_reg[127]_i_24/O[1]
+                         net (fo=160, routed)         1.567     9.089    u_window/mask_reg[127]_i_24_n_6
+    SLICE_X100Y8         LUT6 (Prop_lut6_I2_O)        0.303     9.392 f  u_window/reason[0]_i_105/O
+                         net (fo=1, routed)           0.000     9.392    u_window/reason[0]_i_105_n_0
+    SLICE_X100Y8         MUXF7 (Prop_muxf7_I0_O)      0.209     9.601 f  u_window/reason_reg[0]_i_52/O
+                         net (fo=1, routed)           0.000     9.601    u_window/reason_reg[0]_i_52_n_0
+    SLICE_X100Y8         MUXF8 (Prop_muxf8_I1_O)      0.088     9.689 f  u_window/reason_reg[0]_i_22/O
+                         net (fo=1, routed)           0.852    10.541    u_window/reason_reg[0]_i_22_n_0
+    SLICE_X103Y13        LUT6 (Prop_lut6_I3_O)        0.319    10.860 f  u_window/reason[0]_i_7/O
+                         net (fo=1, routed)           0.000    10.860    u_window/reason[0]_i_7_n_0
+    SLICE_X103Y13        MUXF7 (Prop_muxf7_I1_O)      0.217    11.077 f  u_window/reason_reg[0]_i_2/O
+                         net (fo=3, routed)           1.225    12.302    u_window/seen
+    SLICE_X105Y33        LUT5 (Prop_lut5_I2_O)        0.293    12.595 r  u_window/mask[127]_i_2/O
+                         net (fo=128, routed)         1.574    14.169    u_window/mask
+    SLICE_X105Y8         FDRE                                         r  u_window/mask_reg[101]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock sys_clk rise edge)   10.000    10.000 r  
+                         propagated clock network latency
+                                                      5.105    15.105    
+                         clock pessimism              0.394    15.499    
+                         clock uncertainty           -0.035    15.464    
+    SLICE_X105Y8         FDRE (Setup_fdre_C_CE)      -0.407    15.057    u_window/mask_reg[101]
+  -------------------------------------------------------------------
+                         required time                         15.057    
+                         arrival time                         -14.169    
+  -------------------------------------------------------------------
+                         slack                                  0.888    
+
+Slack (MET) :             0.891ns  (required time - arrival time)
+  Source:                 u_auth/pkt_r_reg[80]/C
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_window/mask_reg[69]/CE
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             sys_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (sys_clk rise@10.000ns - sys_clk rise@0.000ns)
+  Data Path Delay:        8.642ns  (logic 2.495ns (28.870%)  route 6.147ns (71.130%))
+  Logic Levels:           8  (CARRY4=1 LUT2=1 LUT5=1 LUT6=2 MUXF7=2 MUXF8=1)
+  Clock Path Skew:        -0.060ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    5.101ns = ( 15.101 - 10.000 ) 
+    Source Clock Delay      (SCD):    5.555ns
+    Clock Pessimism Removal (CPR):    0.394ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock sys_clk rise edge)    0.000     0.000 r  
+                         propagated clock network latency
+                                                      5.555     5.555    
+    SLICE_X104Y34        FDRE                         0.000     5.555 r  u_auth/pkt_r_reg[80]/C
+    SLICE_X104Y34        FDRE (Prop_fdre_C_Q)         0.518     6.073 r  u_auth/pkt_r_reg[80]/Q
+                         net (fo=10, routed)          0.900     6.974    u_window/seq[0]
+    SLICE_X106Y30        LUT2 (Prop_lut2_I1_O)        0.124     7.098 r  u_window/mask[127]_i_70/O
+                         net (fo=1, routed)           0.000     7.098    u_window/mask[127]_i_70_n_0
+    SLICE_X106Y30        CARRY4 (Prop_carry4_S[0]_O[1])
+                                                      0.424     7.522 r  u_window/mask_reg[127]_i_24/O[1]
+                         net (fo=160, routed)         1.567     9.089    u_window/mask_reg[127]_i_24_n_6
+    SLICE_X100Y8         LUT6 (Prop_lut6_I2_O)        0.303     9.392 f  u_window/reason[0]_i_105/O
+                         net (fo=1, routed)           0.000     9.392    u_window/reason[0]_i_105_n_0
+    SLICE_X100Y8         MUXF7 (Prop_muxf7_I0_O)      0.209     9.601 f  u_window/reason_reg[0]_i_52/O
+                         net (fo=1, routed)           0.000     9.601    u_window/reason_reg[0]_i_52_n_0
+    SLICE_X100Y8         MUXF8 (Prop_muxf8_I1_O)      0.088     9.689 f  u_window/reason_reg[0]_i_22/O
+                         net (fo=1, routed)           0.852    10.541    u_window/reason_reg[0]_i_22_n_0
+    SLICE_X103Y13        LUT6 (Prop_lut6_I3_O)        0.319    10.860 f  u_window/reason[0]_i_7/O
+                         net (fo=1, routed)           0.000    10.860    u_window/reason[0]_i_7_n_0
+    SLICE_X103Y13        MUXF7 (Prop_muxf7_I1_O)      0.217    11.077 f  u_window/reason_reg[0]_i_2/O
+                         net (fo=3, routed)           1.225    12.302    u_window/seen
+    SLICE_X105Y33        LUT5 (Prop_lut5_I2_O)        0.293    12.595 r  u_window/mask[127]_i_2/O
+                         net (fo=128, routed)         1.603    14.198    u_window/mask
+    SLICE_X94Y11         FDRE                                         r  u_window/mask_reg[69]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock sys_clk rise edge)   10.000    10.000 r  
+                         propagated clock network latency
+                                                      5.101    15.101    
+                         clock pessimism              0.394    15.495    
+                         clock uncertainty           -0.035    15.460    
+    SLICE_X94Y11         FDRE (Setup_fdre_C_CE)      -0.371    15.089    u_window/mask_reg[69]
+  -------------------------------------------------------------------
+                         required time                         15.089    
+                         arrival time                         -14.198    
+  -------------------------------------------------------------------
+                         slack                                  0.891    
+
+Slack (MET) :             0.891ns  (required time - arrival time)
+  Source:                 u_auth/pkt_r_reg[80]/C
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_window/mask_reg[70]/CE
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             sys_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (sys_clk rise@10.000ns - sys_clk rise@0.000ns)
+  Data Path Delay:        8.642ns  (logic 2.495ns (28.870%)  route 6.147ns (71.130%))
+  Logic Levels:           8  (CARRY4=1 LUT2=1 LUT5=1 LUT6=2 MUXF7=2 MUXF8=1)
+  Clock Path Skew:        -0.060ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    5.101ns = ( 15.101 - 10.000 ) 
+    Source Clock Delay      (SCD):    5.555ns
+    Clock Pessimism Removal (CPR):    0.394ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock sys_clk rise edge)    0.000     0.000 r  
+                         propagated clock network latency
+                                                      5.555     5.555    
+    SLICE_X104Y34        FDRE                         0.000     5.555 r  u_auth/pkt_r_reg[80]/C
+    SLICE_X104Y34        FDRE (Prop_fdre_C_Q)         0.518     6.073 r  u_auth/pkt_r_reg[80]/Q
+                         net (fo=10, routed)          0.900     6.974    u_window/seq[0]
+    SLICE_X106Y30        LUT2 (Prop_lut2_I1_O)        0.124     7.098 r  u_window/mask[127]_i_70/O
+                         net (fo=1, routed)           0.000     7.098    u_window/mask[127]_i_70_n_0
+    SLICE_X106Y30        CARRY4 (Prop_carry4_S[0]_O[1])
+                                                      0.424     7.522 r  u_window/mask_reg[127]_i_24/O[1]
+                         net (fo=160, routed)         1.567     9.089    u_window/mask_reg[127]_i_24_n_6
+    SLICE_X100Y8         LUT6 (Prop_lut6_I2_O)        0.303     9.392 f  u_window/reason[0]_i_105/O
+                         net (fo=1, routed)           0.000     9.392    u_window/reason[0]_i_105_n_0
+    SLICE_X100Y8         MUXF7 (Prop_muxf7_I0_O)      0.209     9.601 f  u_window/reason_reg[0]_i_52/O
+                         net (fo=1, routed)           0.000     9.601    u_window/reason_reg[0]_i_52_n_0
+    SLICE_X100Y8         MUXF8 (Prop_muxf8_I1_O)      0.088     9.689 f  u_window/reason_reg[0]_i_22/O
+                         net (fo=1, routed)           0.852    10.541    u_window/reason_reg[0]_i_22_n_0
+    SLICE_X103Y13        LUT6 (Prop_lut6_I3_O)        0.319    10.860 f  u_window/reason[0]_i_7/O
+                         net (fo=1, routed)           0.000    10.860    u_window/reason[0]_i_7_n_0
+    SLICE_X103Y13        MUXF7 (Prop_muxf7_I1_O)      0.217    11.077 f  u_window/reason_reg[0]_i_2/O
+                         net (fo=3, routed)           1.225    12.302    u_window/seen
+    SLICE_X105Y33        LUT5 (Prop_lut5_I2_O)        0.293    12.595 r  u_window/mask[127]_i_2/O
+                         net (fo=128, routed)         1.603    14.198    u_window/mask
+    SLICE_X94Y11         FDRE                                         r  u_window/mask_reg[70]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock sys_clk rise edge)   10.000    10.000 r  
+                         propagated clock network latency
+                                                      5.101    15.101    
+                         clock pessimism              0.394    15.495    
+                         clock uncertainty           -0.035    15.460    
+    SLICE_X94Y11         FDRE (Setup_fdre_C_CE)      -0.371    15.089    u_window/mask_reg[70]
+  -------------------------------------------------------------------
+                         required time                         15.089    
+                         arrival time                         -14.198    
+  -------------------------------------------------------------------
+                         slack                                  0.891    
+
+Slack (MET) :             0.898ns  (required time - arrival time)
+  Source:                 u_auth/pkt_r_reg[80]/C
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_window/mask_reg[92]/CE
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             sys_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (sys_clk rise@10.000ns - sys_clk rise@0.000ns)
+  Data Path Delay:        8.639ns  (logic 2.495ns (28.881%)  route 6.144ns (71.119%))
+  Logic Levels:           8  (CARRY4=1 LUT2=1 LUT5=1 LUT6=2 MUXF7=2 MUXF8=1)
+  Clock Path Skew:        -0.057ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    5.104ns = ( 15.104 - 10.000 ) 
+    Source Clock Delay      (SCD):    5.555ns
+    Clock Pessimism Removal (CPR):    0.394ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock sys_clk rise edge)    0.000     0.000 r  
+                         propagated clock network latency
+                                                      5.555     5.555    
+    SLICE_X104Y34        FDRE                         0.000     5.555 r  u_auth/pkt_r_reg[80]/C
+    SLICE_X104Y34        FDRE (Prop_fdre_C_Q)         0.518     6.073 r  u_auth/pkt_r_reg[80]/Q
+                         net (fo=10, routed)          0.900     6.974    u_window/seq[0]
+    SLICE_X106Y30        LUT2 (Prop_lut2_I1_O)        0.124     7.098 r  u_window/mask[127]_i_70/O
+                         net (fo=1, routed)           0.000     7.098    u_window/mask[127]_i_70_n_0
+    SLICE_X106Y30        CARRY4 (Prop_carry4_S[0]_O[1])
+                                                      0.424     7.522 r  u_window/mask_reg[127]_i_24/O[1]
+                         net (fo=160, routed)         1.567     9.089    u_window/mask_reg[127]_i_24_n_6
+    SLICE_X100Y8         LUT6 (Prop_lut6_I2_O)        0.303     9.392 f  u_window/reason[0]_i_105/O
+                         net (fo=1, routed)           0.000     9.392    u_window/reason[0]_i_105_n_0
+    SLICE_X100Y8         MUXF7 (Prop_muxf7_I0_O)      0.209     9.601 f  u_window/reason_reg[0]_i_52/O
+                         net (fo=1, routed)           0.000     9.601    u_window/reason_reg[0]_i_52_n_0
+    SLICE_X100Y8         MUXF8 (Prop_muxf8_I1_O)      0.088     9.689 f  u_window/reason_reg[0]_i_22/O
+                         net (fo=1, routed)           0.852    10.541    u_window/reason_reg[0]_i_22_n_0
+    SLICE_X103Y13        LUT6 (Prop_lut6_I3_O)        0.319    10.860 f  u_window/reason[0]_i_7/O
+                         net (fo=1, routed)           0.000    10.860    u_window/reason[0]_i_7_n_0
+    SLICE_X103Y13        MUXF7 (Prop_muxf7_I1_O)      0.217    11.077 f  u_window/reason_reg[0]_i_2/O
+                         net (fo=3, routed)           1.225    12.302    u_window/seen
+    SLICE_X105Y33        LUT5 (Prop_lut5_I2_O)        0.293    12.595 r  u_window/mask[127]_i_2/O
+                         net (fo=128, routed)         1.600    14.194    u_window/mask
+    SLICE_X98Y7          FDRE                                         r  u_window/mask_reg[92]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock sys_clk rise edge)   10.000    10.000 r  
+                         propagated clock network latency
+                                                      5.104    15.104    
+                         clock pessimism              0.394    15.498    
+                         clock uncertainty           -0.035    15.463    
+    SLICE_X98Y7          FDRE (Setup_fdre_C_CE)      -0.371    15.092    u_window/mask_reg[92]
+  -------------------------------------------------------------------
+                         required time                         15.092    
+                         arrival time                         -14.194    
+  -------------------------------------------------------------------
+                         slack                                  0.898    
+
+
+
+

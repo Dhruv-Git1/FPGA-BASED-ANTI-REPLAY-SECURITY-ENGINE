@@ -1,0 +1,40 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2024.2 (win64) Build 5239630 Fri Nov 08 22:35:27 MST 2024
+| Date         : Sun Oct 25 16:13:29 2026
+| Host         : hp running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical -file reports/W64/impl_utilization_hier.rpt
+| Design       : top_zedboard
+| Device       : xc7z020clg484-1
+| Speed File   : -1
+| Design State : Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++------------------+----------------+------------+------------+---------+------+------+--------+--------+------------+
+|     Instance     |     Module     | Total LUTs | Logic LUTs | LUTRAMs | SRLs |  FFs | RAMB36 | RAMB18 | DSP Blocks |
++------------------+----------------+------------+------------+---------+------+------+--------+--------+------------+
+| top_zedboard     |          (top) |       1314 |       1314 |       0 |    0 | 1069 |      0 |      0 |          0 |
+|   (top_zedboard) |          (top) |         16 |         16 |       0 |    0 |   96 |      0 |      0 |          0 |
+|   u_auth         |     auth_stage |        554 |        554 |       0 |    0 |  522 |      0 |      0 |          0 |
+|     (u_auth)     |     auth_stage |          2 |          2 |       0 |    0 |  132 |      0 |      0 |          0 |
+|     u_sip        |      siphash24 |        553 |        553 |       0 |    0 |  390 |      0 |      0 |          0 |
+|   u_parser       |   frame_parser |         44 |         44 |       0 |    0 |  169 |      0 |      0 |          0 |
+|   u_rx           |        uart_rx |         44 |         44 |       0 |    0 |   34 |      0 |      0 |          0 |
+|   u_strict       | strict_counter |         15 |         15 |       0 |    0 |   33 |      0 |      0 |          0 |
+|   u_tel          |      telemetry |        254 |        254 |       0 |    0 |  113 |      0 |      0 |          0 |
+|     (u_tel)      |      telemetry |         11 |         11 |       0 |    0 |   81 |      0 |      0 |          0 |
+|     u_tx         |        uart_tx |        243 |        243 |       0 |    0 |   32 |      0 |      0 |          0 |
+|   u_window       | sliding_window |        391 |        391 |       0 |    0 |  102 |      0 |      0 |          0 |
++------------------+----------------+------------+------------+---------+------+------+--------+--------+------------+
+* Note: The sum of lower-level cells may be larger than their parent cells total, due to cross-hierarchy LUT combining
+
+
