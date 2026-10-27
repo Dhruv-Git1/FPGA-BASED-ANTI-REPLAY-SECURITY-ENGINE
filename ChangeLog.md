@@ -1,5 +1,20 @@
 # ChangeLog
 
+## 2026-10-27
+
+### rtl/top_zedboard_ps.v, sw/uart_bridge/, scripts/build.tcl, scripts/build.py, scripts/program_ps.tcl
+Added the `ps` build variant. The PC uses the ZedBoard's J14 UART, and an ARM program relays bytes to the unchanged anti-replay logic through EMIO.
+Impact: the board can be tested without a Pmod USBUART. `build.tcl` takes a second argument, `pmod` or `ps`.
+
+### constraints/zedboard_base.xdc, constraints/pmod_uart.xdc
+Split `zedboard.xdc` so the Pmod UART pins live in their own file. Only the `pmod` variant reads it.
+
+### logs/demo_W64_20261027_151708.log
+First hardware run, `ps` variant with W = 64. Every scenario passed, with 12 clocks core latency and a 7.1 ms average round trip.
+
+### README.md, Flow.md, Decisions.md
+Described the two variants and recorded the reasons for the ARM relay.
+
 ## 2026-10-25
 
 ### Repository setup

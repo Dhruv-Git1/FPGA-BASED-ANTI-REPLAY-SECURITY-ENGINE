@@ -8,6 +8,21 @@ Decision: a Digilent Pmod USBUART on Pmod JA connects the PC straight to the FPG
 Alternatives: run a bare-metal ARM program that relays bytes over an AXI bus. That needs Vitis, C code and a block design.
 Trade-off: one extra adapter costs about 15 USD. Accepted because the specification describes a pure RTL datapath and this keeps it that way.
 
+## Add an ARM-relay variant for the built-in UART port
+
+Date: 2026-10-27
+Context: no Pmod USBUART was available for the first hardware test. The ZedBoard's J14 USB-UART reaches only the processor's UART1.
+Decision: add a `ps` build variant. `rtl/top_zedboard_ps.v` adds the Zynq processor with the ZedBoard preset and routes UART0 to the FPGA logic through EMIO. A 40-line bare-metal program, `sw/uart_bridge/main.c`, copies bytes between UART1 and UART0.
+Alternatives: wait for the Pmod, or use an AXI bus between processor and logic. AXI would change the logic's interface. A UART-to-UART relay leaves `top_zedboard` untouched.
+Trade-off: the processor sits in the data path, so the system is no longer pure FPGA logic. It copies bytes and never inspects them, so every security decision still comes from the FPGA logic. The `pmod` variant remains the reference for the resource comparison.
+
+## Bridge program without a Vitis platform
+
+Date: 2026-10-27
+Context: the bridge only needs two UARTs and a loop.
+Decision: compile `sw/uart_bridge` directly with the Vitis ARM compiler, using a small start-up file and linker script. The program runs from on-chip memory. `program_ps.tcl` uses the generated `ps7_init.tcl` to set up clocks and pins.
+Alternatives: a Vitis platform and board support package. That adds a large generated project for a 40-line program.
+
 ## Pmod USBUART pin direction
 
 Date: 2026-10-25

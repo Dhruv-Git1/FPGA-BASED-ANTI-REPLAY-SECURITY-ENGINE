@@ -20,12 +20,16 @@ A wrong expected value can only come from `siphash.py`, `replay_model.py` or `sc
 
 All logic runs on the 100 MHz board clock. Reset comes from a 16-clock power-on counter.
 
-1. **`uart_rx`** synchronizes the JA3 pin, finds start bits and outputs bytes. A bad stop bit raises `frame_err` instead.
+The serial line reaches `top_zedboard` in one of two ways.
+- `pmod` variant: straight from the Pmod USBUART pins on JA.
+- `ps` variant: `rtl/top_zedboard_ps.v` wraps `top_zedboard`. The PC talks to processor UART1 on J14. The ARM program `sw/uart_bridge/main.c` copies each byte to processor UART0, which is wired to `top_zedboard` through EMIO. Replies travel back the same way.
+
+1. **`uart_rx`** synchronizes the serial input, finds start bits and outputs bytes. A bad stop bit raises `frame_err` instead.
 2. **`frame_parser`** waits for `A5`. `A5 5A` begins a frame. It collects 16 bytes and pulses `frame_valid`. `A5 C3` pulses `reset_req`. A framing error or a 10 ms gap during a frame pulses `parse_err`.
 3. **`auth_stage`** copies the frame into `pkt_r` and starts **`siphash24`**. Ten clocks later it compares the result with the received tag. It then pulses `auth_done` with `mac_ok` and `seq`.
 4. **`strict_counter`** and **`sliding_window`** both act on `auth_done` in the same clock. Neither engine changes state when `mac_ok` is low. Both pulse `out_valid` one clock later.
 5. The top level counts clocks from `frame_valid` to the verdict as `LAT`. It also counts verdicts as `CNT`.
-6. **`telemetry`** copies the verdict and sends one text line through **`uart_tx`** on JA2. `reset_req`, the BTNC button and `parse_err` produce `RST` or `ERR` lines.
+6. **`telemetry`** copies the verdict and sends one text line through **`uart_tx`**. `reset_req`, the BTNC button and `parse_err` produce `RST` or `ERR` lines.
 7. The LED register is updated from the same verdict.
 
 `session_clear` (the A5 C3 frame or the BTNC button) clears both engines and LEDs 1 to 6.
@@ -34,7 +38,7 @@ All logic runs on the 100 MHz board clock. Reset comes from a 16-clock power-on 
 
 | Symptom | Likely origin |
 |---|---|
-| No telemetry at all | Pmod pins swapped, wrong COM port, or the bitstream is not loaded |
+| No telemetry at all | Pmod pins swapped, wrong COM port, or the bitstream is not loaded. In the `ps` variant, also the bridge program not started (rerun `--variant ps --program`) |
 | Only `ERR` lines | Baud mismatch or bytes arriving with gaps longer than 10 ms |
 | `MAC=0` for every packet | Byte order differs between `packet.py` and `auth_stage.bswap64`, or the key differs |
 | Correct MAC, wrong window reason | `sliding_window.v` rule, or the board was built with a different W than `--w` |
@@ -46,3 +50,4 @@ All logic runs on the 100 MHz board clock. Reset comes from a 16-clock power-on 
 2. `tb_siphash24` checks the core alone. `tb_replay` checks both engines and their state isolation. `tb_top` drives UART waveforms into `top_zedboard` and checks the telemetry text.
 3. `scripts/build.py` runs `scripts/build.tcl` in Vivado once per W. Reports go to `reports/W<W>/`, bitstreams to `build/W<W>/`. It then writes `reports/summary.md`.
 4. `scripts/build.py --program W` runs `scripts/program.tcl` to load a bitstream over JTAG.
+5. `scripts/build.py --variant ps` compiles `sw/uart_bridge` with the Vitis ARM compiler and runs `build.tcl` in `ps` mode. That mode generates the Zynq block design and copies `ps7_init.tcl`. `--variant ps --program W` runs `scripts/program_ps.tcl` in xsdb. It loads the bitstream, initializes the processor, loads the bridge program and starts it.

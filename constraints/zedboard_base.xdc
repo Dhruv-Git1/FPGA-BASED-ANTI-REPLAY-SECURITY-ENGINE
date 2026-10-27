@@ -1,4 +1,4 @@
-## ZedBoard (xc7z020clg484-1) constraints for top_zedboard.v
+## ZedBoard (xc7z020clg484-1) constraints shared by both build variants
 ## Pin locations and I/O standards come from the Digilent ZedBoard board file
 ## shipped with Vivado (XilinxBoardStore boards/Digilent/zedboard/1.3/part0_pins.xml).
 
@@ -19,14 +19,7 @@ set_property -dict { PACKAGE_PIN U14 IOSTANDARD LVCMOS33 } [get_ports {led[7]}]
 ## Centre push button BTNC (bank 34, powered by VADJ, 2.5 V in the board file)
 set_property -dict { PACKAGE_PIN P16 IOSTANDARD LVCMOS25 } [get_ports btn_c]
 
-## Pmod USBUART on Pmod JA, top row (bank 13, 3.3 V).
-## The Pmod names its pins from its own FTDI chip's point of view:
-##   JA2 "RXD" is data INTO the Pmod, so the FPGA transmits on it.
-##   JA3 "TXD" is data OUT of the Pmod, so the FPGA receives on it.
-set_property -dict { PACKAGE_PIN AA11 IOSTANDARD LVCMOS33 } [get_ports uart_tx]
-set_property -dict { PACKAGE_PIN Y10  IOSTANDARD LVCMOS33 PULLUP true } [get_ports uart_rx]
-
-## The UART input and the button are asynchronous and pass through two-flip-flop
-## synchronizers. LED outputs are slow status lights. None needs I/O timing.
-set_false_path -from [get_ports {uart_rx btn_c}]
-set_false_path -to   [get_ports {uart_tx led[*]}]
+## The button is asynchronous and passes through a two-flip-flop synchronizer.
+## LED outputs are slow status lights. Neither needs I/O timing.
+set_false_path -from [get_ports btn_c]
+set_false_path -to   [get_ports {led[*]}]

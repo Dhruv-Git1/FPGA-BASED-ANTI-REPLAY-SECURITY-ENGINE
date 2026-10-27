@@ -10,13 +10,20 @@ python -m pytest tests                    # Python golden models
 python scripts/run_sim.py                 # all testbenches in xsim, W = 16 32 64 128
 python scripts/build.py                   # four bitstreams and reports/summary.md
 python scripts/build.py --program 64      # load W=64 onto the board (JTAG)
-python host/demo.py --list                # find the Pmod USBUART COM port
+python host/demo.py --list                # find the serial port
 python host/demo.py --port COM5 --w 64    # run every scenario on the board
 ```
 
 Vivado 2024.2 is expected in `C:\vivado_2024\Vivado\2024.2\bin`. Set `VIVADO_BIN` to use another install.
 
-**Board setup.** Plug a Digilent Pmod USBUART into the top row of Pmod JA (pins 1 to 6). Connect a USB cable to the ZedBoard PROG port (J17) for programming. Set the boot-mode jumpers MIO2 to MIO6 to JTAG mode, which places all five on the GND side. The ZedBoard's own UART port (J14) is not used, because it is wired to the ARM processor and not to the FPGA logic.
+**Board setup.** Connect a USB cable to the ZedBoard PROG port (J17) for programming. Set the boot-mode jumpers MIO2 to MIO6 to JTAG mode, which places all five on the GND side. Then choose how the PC reaches the FPGA logic.
+
+| Variant | PC link | Build and load |
+|---|---|---|
+| `pmod` (default) | Digilent Pmod USBUART in the top row of Pmod JA. Pure FPGA logic. | `python scripts/build.py --w 64`, then `--program 64` |
+| `ps` | The ZedBoard's own UART port (J14). Its chip is wired to the ARM processor, so a small ARM program (`sw/uart_bridge`) copies bytes to the FPGA logic. | `python scripts/build.py --variant ps --w 64`, then `--variant ps --program 64` |
+
+Both variants use the same anti-replay logic, `rtl/top_zedboard.v`. In the `ps` variant the processor never inspects packets. The `ps` variant also needs Vitis 2024.2 for its ARM compiler and the ZedBoard board files. Set `BOARD_REPO` if they are not in the default folder.
 
 ## Context and scope
 
@@ -65,7 +72,7 @@ uart_rx --> frame_parser --> auth_stage (siphash24) --+--> strict_counter --+
 | LUTs, FFs, slices, per-engine breakdown | `reports/W<W>/impl_utilization*.rpt`, collected in `reports/summary.md` |
 | WNS, critical path, estimated Fmax | `reports/W<W>/timing_summary.rpt` and `critical_paths.rpt`, with a 100 MHz constraint |
 | Core latency | `LAT` field. Simulation shows 12 clocks for every W |
-| Hardware correctness and UART round trip | `host/demo.py` output and `logs/` |
+| Hardware correctness and UART round trip | `host/demo.py` output and `logs/`. On 2026-10-27 the `ps` variant with W = 64 passed every scenario on the board, with 12 clocks core latency and a 7.1 ms average PC round trip |
 
 The 115200-baud link limits packet rate to roughly 640 frames per second before telemetry. That limit is separate from the core's clock frequency.
 
@@ -74,13 +81,14 @@ The 115200-baud link limits packet rate to roughly 640 frames per second before 
 | Path | Contents |
 |---|---|
 | `rtl/` | `siphash24.v`, `auth_stage.v`, `strict_counter.v`, `sliding_window.v`, `uart_rx.v`, `uart_tx.v`, `frame_parser.v`, `telemetry.v`, `top_zedboard.v` |
-| `constraints/zedboard.xdc` | Pins from the Digilent ZedBoard board file |
+| `constraints/` | `zedboard_base.xdc` (clock, LEDs, button) and `pmod_uart.xdc` (Pmod pins), from the Digilent ZedBoard board file |
+| `rtl/top_zedboard_ps.v`, `sw/uart_bridge/` | `ps` variant: Zynq processor block plus the bare-metal ARM byte relay |
 | `sim/` | `tb_siphash24.sv`, `tb_replay.sv`, `tb_top.sv`, and generated `vectors/` |
 | `host/` | `siphash.py`, `packet.py`, `replay_model.py`, `scenarios.py`, `telemetry.py`, `gen_vectors.py`, `demo.py` |
 | `tests/` | pytest checks of the golden models |
-| `scripts/` | `run_sim.py`, `build.py`, `build.tcl`, `program.tcl` |
+| `scripts/` | `run_sim.py`, `build.py`, `build.tcl`, `program.tcl`, `program_ps.tcl` |
 | `reports/`, `logs/` | Vivado reports and hardware run logs |
 
 ## Alternatives considered
 
-The ARM processor could relay bytes from the board's built-in UART. That adds a C program, Vitis, and an AXI bus between the processor and the FPGA logic. A Pmod adapter keeps the whole datapath in Verilog. A fully unrolled SipHash pipeline would accept one packet per clock but would use many times the logic. The UART delivers one packet per 1.5 ms, so the extra speed would never be used. Further reasoning is in `Decisions.md`.
+The `ps` variant relays bytes through the ARM processor over EMIO, which needs no extra hardware. It uses a direct UART-to-UART connection, not an AXI bus. The `pmod` variant keeps the whole datapath in Verilog and is the reference for the resource comparison. A fully unrolled SipHash pipeline would accept one packet per clock but would use many times the logic. The UART delivers one packet per 1.5 ms, so the extra speed would never be used. Further reasoning is in `Decisions.md`.

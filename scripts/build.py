@@ -6,6 +6,11 @@ Usage:
   python scripts/build.py --summary-only  only re-read existing reports
   python scripts/build.py --program 64    load build/W64 onto the board
 
+  Variant "ps" (PC link through the ZedBoard's own J14 USB-UART, relayed by the ARM):
+  python scripts/build.py --variant ps --w 64          bitstream and ARM bridge program
+  python scripts/build.py --variant ps --program 64    load both and start the bridge
+  python scripts/build.py --firmware                   only compile the ARM bridge
+
 All numbers in reports/summary.md are read from Vivado's own report files.
 Estimated Fmax = 1 / (clock period - WNS), the usual first-order estimate from
 setup slack. It is an estimate, not a measured frequency.
@@ -20,21 +25,47 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 VIVADO_BIN = Path(os.environ.get("VIVADO_BIN", r"C:\vivado_2024\Vivado\2024.2\bin"))
+VITIS_GCC_BIN = Path(os.environ.get(
+    "VITIS_GCC_BIN", r"C:\vivado_2024\Vitis\2024.2\gnu\aarch32\nt\gcc-arm-none-eabi\bin"))
 CLOCK_PERIOD_NS = 10.0
 
 
-def vivado(script: str, w: int, tag: str) -> None:
+def build_dir(w: int, variant: str) -> str:
+    return f"ps_W{w}" if variant == "ps" else f"W{w}"
+
+
+def vivado(script: str, w: int, tag: str, variant: str = "pmod") -> None:
     exe = VIVADO_BIN / ("vivado.bat" if os.name == "nt" else "vivado")
-    log_dir = ROOT / "build" / f"W{w}"
-    log_dir.mkdir(parents=True, exist_ok=True)
+    d = build_dir(w, variant)
+    (ROOT / "build" / d).mkdir(parents=True, exist_ok=True)
     # Everything after -tclargs goes to the Tcl script, so -tclargs must come last.
-    args = [str(exe), "-mode", "batch", "-log", f"build/W{w}/{tag}.log",
-            "-journal", f"build/W{w}/{tag}.jou", "-source", f"scripts/{script}",
-            "-tclargs", str(w)]
-    print(f"Running Vivado {script} for W={w} ...", flush=True)
+    args = [str(exe), "-mode", "batch", "-log", f"build/{d}/{tag}.log",
+            "-journal", f"build/{d}/{tag}.jou", "-source", f"scripts/{script}",
+            "-tclargs", str(w), variant]
+    print(f"Running Vivado {script} for W={w} ({variant}) ...", flush=True)
     result = subprocess.run(args, cwd=ROOT)
     if result.returncode != 0:
-        sys.exit(f"Vivado failed, see build/W{w}/{tag}.log")
+        sys.exit(f"Vivado failed, see build/{d}/{tag}.log")
+
+
+def build_firmware() -> None:
+    """Compile the ARM bridge program (sw/uart_bridge) to build/sw/uart_bridge.elf."""
+    gcc = VITIS_GCC_BIN / ("arm-none-eabi-gcc.exe" if os.name == "nt" else "arm-none-eabi-gcc")
+    (ROOT / "build" / "sw").mkdir(parents=True, exist_ok=True)
+    src = "sw/uart_bridge"
+    args = [str(gcc), "-mcpu=cortex-a9", "-marm", "-O2", "-Wall", "-Wextra", "-ffreestanding",
+            "-nostdlib", "-T", f"{src}/link.ld", f"{src}/start.S", f"{src}/main.c",
+            "-o", "build/sw/uart_bridge.elf"]
+    print("Compiling ARM bridge program ...", flush=True)
+    if subprocess.run(args, cwd=ROOT).returncode != 0:
+        sys.exit("ARM compile failed")
+
+
+def program_ps(w: int) -> None:
+    exe = VIVADO_BIN / ("xsdb.bat" if os.name == "nt" else "xsdb")
+    print(f"Loading ps_W{w} and starting the ARM bridge ...", flush=True)
+    if subprocess.run([str(exe), "scripts/program_ps.tcl", str(w)], cwd=ROOT).returncode != 0:
+        sys.exit("xsdb failed")
 
 
 def table_value(text: str, row: str) -> str | None:
@@ -43,7 +74,7 @@ def table_value(text: str, row: str) -> str | None:
 
 
 def summarize_one(w: int) -> dict | None:
-    rep = ROOT / "reports" / f"W{w}"
+    rep = ROOT / "reports" / f"W{w}"  # the comparison table uses the pmod variant
     try:
         util = (rep / "impl_utilization.rpt").read_text()
         hier = (rep / "impl_utilization_hier.rpt").read_text()
@@ -102,10 +133,23 @@ def main() -> None:
     ap.add_argument("--w", type=int, nargs="+", default=[16, 32, 64, 128])
     ap.add_argument("--summary-only", action="store_true")
     ap.add_argument("--program", type=int, metavar="W")
+    ap.add_argument("--variant", choices=["pmod", "ps"], default="pmod")
+    ap.add_argument("--firmware", action="store_true", help="only compile the ARM bridge")
     args = ap.parse_args()
 
+    if args.firmware:
+        build_firmware()
+        return
     if args.program:
-        vivado("program.tcl", args.program, "program")
+        if args.variant == "ps":
+            program_ps(args.program)
+        else:
+            vivado("program.tcl", args.program, "program")
+        return
+    if args.variant == "ps":
+        build_firmware()
+        for w in args.w:
+            vivado("build.tcl", w, "build", "ps")
         return
     if not args.summary_only:
         for w in args.w:
