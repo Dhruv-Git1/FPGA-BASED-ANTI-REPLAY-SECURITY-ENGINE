@@ -19,8 +19,9 @@ WORK = ROOT / "build" / "sim"
 REL_ROOT = "../.."  # from WORK back to ROOT
 
 RTL = ["siphash24.v", "auth_stage.v", "strict_counter.v", "sliding_window.v",
-       "uart_rx.v", "uart_tx.v", "frame_parser.v", "telemetry.v", "top_zedboard.v"]
-TBS = ["tb_siphash24.sv", "tb_replay.sv", "tb_top.sv"]
+       "uart_rx.v", "uart_tx.v", "frame_parser.v", "telemetry.v", "led_display.v",
+       "font8x8_rom.v", "oled_status.v", "oled_ssd1306.v", "top_zedboard.v"]
+TBS = ["tb_siphash24.sv", "tb_replay.sv", "tb_top.sv", "tb_led_display.sv", "tb_oled.sv"]
 
 
 def tool(name: str) -> str:
@@ -56,7 +57,7 @@ def simulate(top: str, snapshot: str, generics: list[str]) -> bool:
     out = run_with_options("xsim", [snapshot, "-runall", "-testplusarg",
                                     f"VEC={REL_ROOT}/sim/vectors"], f"sim_{snapshot}.log")
     summary = [ln for ln in out.splitlines()
-               if ln.startswith(("siphash24:", "replay ", "top ", "FAIL", "RESULT"))]
+               if ln.startswith(("siphash24:", "replay ", "top ", "led_display:", "oled:", "FAIL", "RESULT"))]
     print(f"--- {snapshot}")
     print("\n".join(summary[-12:]))
     return "RESULT: PASS" in out
@@ -73,7 +74,9 @@ def main() -> None:
     run([tool("xvlog")] + [f"{REL_ROOT}/rtl/{f}" for f in RTL], "xvlog_rtl.log")
     run([tool("xvlog"), "-sv"] + [f"{REL_ROOT}/sim/{f}" for f in TBS], "xvlog_tb.log")
 
-    results = {"siphash": simulate("tb_siphash24", "siphash", [])}
+    results = {"siphash": simulate("tb_siphash24", "siphash", []),
+               "led_display": simulate("tb_led_display", "led_display", []),
+               "oled": simulate("tb_oled", "oled", [])}
     for w in args.w:
         results[f"replay_W{w}"] = simulate("tb_replay", f"replay_W{w}", [f"W={w}"])
         if not args.skip_top:

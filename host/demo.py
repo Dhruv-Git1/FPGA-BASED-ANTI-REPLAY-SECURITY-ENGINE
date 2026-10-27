@@ -4,11 +4,14 @@ Usage:
   python host/demo.py --list                     show serial ports
   python host/demo.py --port COM5 --w 64         run all scenarios
   python host/demo.py --port COM5 --w 64 --step  pause before each packet to watch the LEDs
+  python host/demo.py --port COM5 --w 64 --watch 1.5 --only normal_ooo_dup
+                                                 1.5 s between packets, one scenario only
 
 --w must equal the window size of the bitstream on the board. Each frame is sent,
 then the script waits for its telemetry line before sending the next one, because
 the FPGA drops events that arrive while a line is still being sent. A log is
-written to logs/.
+written to logs/. At the end the board's LEDs show the overall result: all on
+for PASS, all blinking for FAIL.
 """
 
 import argparse
@@ -20,7 +23,7 @@ from pathlib import Path
 import serial
 from serial.tools import list_ports
 
-from packet import RESET_FRAME, SOF, Packet
+from packet import FAIL_FRAME, PASS_FRAME, RESET_FRAME, SOF, Packet
 from replay_model import AntiReplayModel
 from scenarios import all_scenarios
 from telemetry import expected_prefix, parse_verdict
@@ -72,13 +75,18 @@ def run(args) -> int:
     print(f"  cut-off frame reports ERR       {'PASS' if ok else 'FAIL (' + line + ')'}")
     total_fail += not ok
 
-    for name, steps in all_scenarios(args.w).items():
+    scenarios = all_scenarios(args.w)
+    if args.only:
+        scenarios = {n: s for n, s in scenarios.items() if n in args.only}
+    for name, steps in scenarios.items():
         print(name)
         log(f"== {name}")
         fails = 0
         for step in steps:
             if args.step:
                 input(f"  Enter to send {'reset' if step == 'reset' else 'seq ' + str(step.seq)} ...")
+            elif args.watch:
+                time.sleep(args.watch)
             if step == "reset":
                 model.reset()
                 line, _ = board.exchange(RESET_FRAME)
@@ -95,7 +103,7 @@ def run(args) -> int:
             if not ok:
                 fails += 1
                 print(f"  MISMATCH expected '{want}'\n           got      '{line}'")
-            elif args.step or len(steps) < 12:
+            elif args.step or args.watch or len(steps) < 12:
                 print(f"  {line}")
         print(f"  {'PASS' if fails == 0 else f'FAIL ({fails} mismatches)'}")
         total_fail += fails
@@ -105,6 +113,11 @@ def run(args) -> int:
         print(f"\nCore latency reported by FPGA: {sorted(latencies)} clock cycles")
         print(f"Average PC round trip per packet (UART + USB + telemetry line): {avg * 1000:.1f} ms")
         log(f"latency_cycles={sorted(latencies)} avg_round_trip_ms={avg * 1000:.2f}")
+    if args.watch:
+        time.sleep(args.watch)
+    # Display only: tells the LEDs the overall result. It changes no replay state.
+    board.ser.write(PASS_FRAME if total_fail == 0 else FAIL_FRAME)
+    board.ser.flush()
     print(f"\n{'ALL PASS' if total_fail == 0 else f'{total_fail} FAILURES'}. Log: {log_path}")
     log_file.close()
     return 0 if total_fail == 0 else 1
@@ -116,6 +129,10 @@ def main() -> None:
     ap.add_argument("--w", type=int, default=64)
     ap.add_argument("--baud", type=int, default=115200)
     ap.add_argument("--step", action="store_true")
+    ap.add_argument("--watch", type=float, default=0.0, metavar="SECONDS",
+                    help="wait this long before each packet so the LED animation can be followed")
+    ap.add_argument("--only", nargs="+", metavar="SCENARIO",
+                    help="run only these: normal_ooo_dup auth_isolation stale window_edges random")
     ap.add_argument("--verbose", action="store_true")
     ap.add_argument("--list", action="store_true")
     args = ap.parse_args()

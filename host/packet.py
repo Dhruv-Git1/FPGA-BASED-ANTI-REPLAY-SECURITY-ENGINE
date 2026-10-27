@@ -7,6 +7,8 @@ Logical packet, 16 bytes, every field most-significant byte first:
     bytes 8-15  MAC_Tag = SipHash-2-4(key, bytes 0-7), in reference output byte order
 On the wire each packet is preceded by the start-of-frame marker A5 5A.
 The marker A5 C3 (no body) asks the FPGA to reset its replay state.
+A5 E1 and A5 E0 tell the FPGA's LED display that a test run passed or failed.
+They change only the LEDs.
 """
 
 from dataclasses import dataclass
@@ -15,6 +17,8 @@ from siphash import LAB_KEY, siphash24
 
 SOF = bytes([0xA5, 0x5A])
 RESET_FRAME = bytes([0xA5, 0xC3])
+PASS_FRAME = bytes([0xA5, 0xE1])
+FAIL_FRAME = bytes([0xA5, 0xE0])
 
 
 @dataclass(frozen=True)

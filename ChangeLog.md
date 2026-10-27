@@ -2,6 +2,20 @@
 
 ## 2026-10-27
 
+### rtl/oled_status.v, rtl/oled_ssd1306.v, rtl/font8x8_rom.v, host/gen_font.py, sim/tb_oled.sv
+Added the on-board OLED display. It shows boot, idle, each packet's stages, reset, frame errors and the final PASS or FAIL as text.
+`tb_oled` decodes the SPI output back into text and caught two bugs before hardware. A one-bit shift came from the testbench decoder. A skipped first pixel column came from the driver.
+
+### rtl/top_zedboard.v, rtl/top_zedboard_ps.v, constraints/zedboard_base.xdc, scripts/run_sim.py
+Connected the OLED in both top levels and added its six pins.
+
+### rtl/led_display.v, rtl/top_zedboard.v, rtl/frame_parser.v, sim/tb_led_display.sv, scripts/run_sim.py
+Added an LED display that replays each event slowly enough to see. It covers the boot sweep, stage-by-stage verdicts, blinking rejection reasons, reset flash, parse errors and an overall PASS or FAIL. The parser accepts the display-only frames `A5 E1` and `A5 E0`. The `HEARTBEAT_BIT` parameter is replaced by `LED_TICK_CYCLES`.
+Impact: LED meanings changed from fixed status bits to the patterns in README.md. Replay logic and telemetry are unchanged.
+
+### host/packet.py, host/demo.py
+Added `PASS_FRAME` and `FAIL_FRAME`. `demo.py` sends one at the end of a run, and gains `--watch SECONDS` and `--only SCENARIO`.
+
 ### rtl/top_zedboard_ps.v, sw/uart_bridge/, scripts/build.tcl, scripts/build.py, scripts/program_ps.tcl
 Added the `ps` build variant. The PC uses the ZedBoard's J14 UART, and an ARM program relays bytes to the unchanged anti-replay logic through EMIO.
 Impact: the board can be tested without a Pmod USBUART. `build.tcl` takes a second argument, `pmod` or `ps`.

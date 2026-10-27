@@ -8,6 +8,35 @@ Decision: a Digilent Pmod USBUART on Pmod JA connects the PC straight to the FPG
 Alternatives: run a bare-metal ARM program that relays bytes over an AXI bus. That needs Vitis, C code and a block design.
 Trade-off: one extra adapter costs about 15 USD. Accepted because the specification describes a pure RTL datapath and this keeps it that way.
 
+## OLED text display built in RTL
+
+Date: 2026-10-27
+Context: the project shows its decisions on the board. The ZedBoard has a 128x32 SSD1306 OLED wired to the FPGA logic.
+Decision: drive it directly from RTL. `oled_ssd1306.v` uses write-only SPI at about 3 MHz, in the PmodOLED power-up order. `oled_status.v` produces 4 lines of 16 characters.
+Alternatives: the Digilent PmodOLED IP needs a processor and an AXI bus. That would put software between the verdict and the display.
+Trade-off: every screen is fixed in hardware. Changing the wording needs a rebuild.
+
+## Font from font8x8, transposed at generation time
+
+Date: 2026-10-27
+Context: the OLED needs an 8x8 pixel font, and a font typed from memory would have errors.
+Decision: `host/gen_font.py` converts the public-domain `font8x8_basic.h` (github.com/dhepper/font8x8) into `rtl/font8x8_rom.v`, one column byte per entry as the SSD1306 expects.
+Trade-off: the ROM is generated code. Regenerate it with the script rather than editing it.
+
+## LED display replays events slowly
+
+Date: 2026-10-27
+Context: a verdict takes 12 clocks, so LEDs that follow the datapath directly change too fast to see.
+Decision: `rtl/led_display.v` latches each event and plays it back in 125 ms steps. A new event replaces the current display and restarts the step timer.
+Trade-off: when packets arrive faster than the animation, the LEDs show only the latest one. Telemetry remains the complete record.
+
+## Host result frames are display only
+
+Date: 2026-10-27
+Context: the FPGA cannot know whether a test run passed, because the expected answers live on the PC.
+Decision: the PC sends `A5 E1` (pass) or `A5 E0` (fail) at the end of `demo.py`. The parser turns them into pulses that reach only `led_display`.
+Trade-off: anyone on the serial link can change the LED result. They cannot change any replay state, so this is acceptable for a lab display.
+
 ## Add an ARM-relay variant for the built-in UART port
 
 Date: 2026-10-27

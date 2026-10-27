@@ -26,7 +26,7 @@ module tb_top #(parameter W = 64);
 
     top_zedboard #(
         .W(W), .CLK_HZ(CPB * 100_000), .BAUD(100_000),
-        .TIMEOUT_CYCLES(TIMEOUT_BITS * CPB), .DEBOUNCE_CYCLES(16), .HEARTBEAT_BIT(4)
+        .TIMEOUT_CYCLES(TIMEOUT_BITS * CPB), .DEBOUNCE_CYCLES(16), .LED_TICK_CYCLES(64)
     ) dut (.clk(clk), .btn_c(btn), .uart_rx(rx), .uart_tx(tx), .led(led));
 
     task automatic send_byte(input [7:0] b, input bit good_stop);

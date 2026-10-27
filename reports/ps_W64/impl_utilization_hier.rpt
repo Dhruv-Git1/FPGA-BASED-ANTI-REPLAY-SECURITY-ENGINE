@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2024.2 (win64) Build 5239630 Fri Nov 08 22:35:27 MST 2024
-| Date         : Tue Oct 27 15:16:19 2026
+| Date         : Tue Oct 27 16:02:16 2026
 | Host         : hp running 64-bit major release  (build 9200)
 | Command      : report_utilization -hierarchical -file reports/ps_W64/impl_utilization_hier.rpt
 | Design       : top_zedboard_ps
@@ -22,19 +22,22 @@ Table of Contents
 +---------------------+--------------------------------------------+------------+------------+---------+------+------+--------+--------+------------+
 |       Instance      |                   Module                   | Total LUTs | Logic LUTs | LUTRAMs | SRLs |  FFs | RAMB36 | RAMB18 | DSP Blocks |
 +---------------------+--------------------------------------------+------------+------------+---------+------+------+--------+--------+------------+
-| top_zedboard_ps     |                                      (top) |       1314 |       1314 |       0 |    0 | 1069 |      0 |      0 |          0 |
+| top_zedboard_ps     |                                      (top) |       1765 |       1765 |       0 |    0 | 1281 |      0 |      1 |          0 |
 |   (top_zedboard_ps) |                                      (top) |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |
-|   u_core            |                               top_zedboard |       1314 |       1314 |       0 |    0 | 1069 |      0 |      0 |          0 |
-|     (u_core)        |                               top_zedboard |         19 |         19 |       0 |    0 |   96 |      0 |      0 |          0 |
-|     u_auth          |                                 auth_stage |        555 |        555 |       0 |    0 |  522 |      0 |      0 |          0 |
+|   u_core            |                               top_zedboard |       1765 |       1765 |       0 |    0 | 1281 |      0 |      1 |          0 |
+|     (u_core)        |                               top_zedboard |         15 |         15 |       0 |    0 |   61 |      0 |      0 |          0 |
+|     u_auth          |                                 auth_stage |        554 |        554 |       0 |    0 |  522 |      0 |      0 |          0 |
 |       (u_auth)      |                                 auth_stage |          2 |          2 |       0 |    0 |  132 |      0 |      0 |          0 |
-|       u_sip         |                                  siphash24 |        554 |        554 |       0 |    0 |  390 |      0 |      0 |          0 |
-|     u_parser        |                               frame_parser |         41 |         41 |       0 |    0 |  169 |      0 |      0 |          0 |
+|       u_sip         |                                  siphash24 |        553 |        553 |       0 |    0 |  390 |      0 |      0 |          0 |
+|     u_leds          |                                led_display |         48 |         48 |       0 |    0 |   51 |      0 |      0 |          0 |
+|     u_oled          |                               oled_ssd1306 |        170 |        170 |       0 |    0 |  100 |      0 |      1 |          0 |
+|     u_oled_text     |                                oled_status |        295 |        295 |       0 |    0 |   94 |      0 |      0 |          0 |
+|     u_parser        |                               frame_parser |         51 |         51 |       0 |    0 |  171 |      0 |      0 |          0 |
 |     u_rx            |                                    uart_rx |         44 |         44 |       0 |    0 |   34 |      0 |      0 |          0 |
 |     u_strict        |                             strict_counter |         15 |         15 |       0 |    0 |   33 |      0 |      0 |          0 |
-|     u_tel           |                                  telemetry |        254 |        254 |       0 |    0 |  113 |      0 |      0 |          0 |
-|       (u_tel)       |                                  telemetry |         11 |         11 |       0 |    0 |   81 |      0 |      0 |          0 |
-|       u_tx          |                                    uart_tx |        243 |        243 |       0 |    0 |   32 |      0 |      0 |          0 |
+|     u_tel           |                                  telemetry |        184 |        184 |       0 |    0 |  113 |      0 |      0 |          0 |
+|       (u_tel)       |                                  telemetry |          9 |          9 |       0 |    0 |   81 |      0 |      0 |          0 |
+|       u_tx          |                                    uart_tx |        175 |        175 |       0 |    0 |   32 |      0 |      0 |          0 |
 |     u_window        |                             sliding_window |        391 |        391 |       0 |    0 |  102 |      0 |      0 |          0 |
 |   u_ps              |                          ps_bridge_wrapper |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |
 |     ps_bridge_i     |                                  ps_bridge |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |

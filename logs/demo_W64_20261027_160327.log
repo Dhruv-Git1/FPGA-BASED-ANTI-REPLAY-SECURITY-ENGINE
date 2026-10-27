@@ -1,0 +1,361 @@
+  cut-off frame -> ERR
+== normal_ooo_dup
+  sent a5 c3
+  got  RST  (1.3 ms)
+  sent a5 5a 00 01 00 00 00 01 10 01 01 aa 7a 98 50 a0 7d 18
+  got  SEQ=00000001 MAC=1 STR=1 WIN=1 WR=NEW LAT=000C CNT=0001  (7.3 ms)
+  sent a5 5a 00 01 00 00 00 02 10 02 21 e1 a8 1e c6 28 97 e1
+  got  SEQ=00000002 MAC=1 STR=1 WIN=1 WR=NEW LAT=000C CNT=0002  (7.2 ms)
+  sent a5 5a 00 01 00 00 00 04 10 04 4d 2a 4d 8a 22 ff 8b e6
+  got  SEQ=00000004 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0003  (7.2 ms)
+  sent a5 5a 00 01 00 00 00 03 10 03 bd d4 4f 7e 81 8c 78 67
+  got  SEQ=00000003 MAC=1 STR=1 WIN=1 WR=INW LAT=000C CNT=0004  (7.4 ms)
+  sent a5 5a 00 01 00 00 00 03 10 03 bd d4 4f 7e 81 8c 78 67
+  got  SEQ=00000003 MAC=1 STR=0 WIN=0 WR=DUP LAT=000C CNT=0005  (7.4 ms)
+== auth_isolation
+  sent a5 c3
+  got  RST  (1.3 ms)
+  sent a5 5a 00 01 00 00 00 01 20 01 41 26 66 af d7 7f 13 59
+  got  SEQ=00000001 MAC=1 STR=1 WIN=1 WR=NEW LAT=000C CNT=0006  (7.2 ms)
+  sent a5 5a 00 01 00 00 00 02 20 03 3e 5f e7 5b 33 57 94 37
+  got  SEQ=00000002 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=0007  (7.1 ms)
+  sent a5 5a 00 01 00 00 00 02 20 02 3f 5f e7 5b 33 57 94 37
+  got  SEQ=00000002 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=0008  (7.3 ms)
+  sent a5 5a 00 01 00 0f 42 40 20 02 3e 5f e7 5b 33 57 94 37
+  got  SEQ=000F4240 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=0009  (7.3 ms)
+  sent a5 5a 00 01 00 00 00 02 20 02 3e 5f e7 5b 33 57 94 37
+  got  SEQ=00000002 MAC=1 STR=1 WIN=1 WR=NEW LAT=000C CNT=000A  (7.3 ms)
+== stale
+  sent a5 c3
+  got  RST  (1.1 ms)
+  sent a5 5a 00 01 00 00 00 01 00 00 ee df 58 04 82 37 56 26
+  got  SEQ=00000001 MAC=1 STR=1 WIN=1 WR=NEW LAT=000C CNT=000B  (7.5 ms)
+  sent a5 5a 00 01 00 00 00 48 00 00 36 ea ba c6 f8 aa 89 56
+  got  SEQ=00000048 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=000C  (7.4 ms)
+  sent a5 5a 00 01 00 00 00 01 00 00 ee df 58 04 82 37 56 26
+  got  SEQ=00000001 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=000D  (7.4 ms)
+== window_edges
+  sent a5 c3
+  got  RST  (1.3 ms)
+  sent a5 5a 00 01 00 00 03 e8 00 00 27 4b c2 d1 d5 15 88 a5
+  got  SEQ=000003E8 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=000E  (7.5 ms)
+  sent a5 5a 00 01 00 00 03 a9 00 00 09 df 91 1a c8 f1 84 ef
+  got  SEQ=000003A9 MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=000F  (7.4 ms)
+  sent a5 5a 00 01 00 00 03 a9 00 00 09 df 91 1a c8 f1 84 ef
+  got  SEQ=000003A9 MAC=1 STR=0 WIN=0 WR=DUP LAT=000C CNT=0010  (7.4 ms)
+  sent a5 5a 00 01 00 00 03 a8 00 00 a0 bc a8 4d 83 2f 4a 57
+  got  SEQ=000003A8 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0011  (7.4 ms)
+  sent a5 5a 00 01 00 00 04 28 00 00 0b a9 87 c5 64 4a d1 6b
+  got  SEQ=00000428 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0012  (7.2 ms)
+  sent a5 5a 00 01 00 00 03 e8 00 00 27 4b c2 d1 d5 15 88 a5
+  got  SEQ=000003E8 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0013  (7.4 ms)
+  sent a5 5a 00 01 00 00 04 27 00 00 9c ae 9b a9 5a 50 63 89
+  got  SEQ=00000427 MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=0014  (7.4 ms)
+  sent a5 5a 00 01 00 00 04 2b 00 00 64 a4 04 aa 67 98 db 17
+  got  SEQ=0000042B MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0015  (7.3 ms)
+  sent a5 5a 00 01 00 00 04 27 00 00 9c ae 9b a9 5a 50 63 89
+  got  SEQ=00000427 MAC=1 STR=0 WIN=0 WR=DUP LAT=000C CNT=0016  (7.2 ms)
+== random
+  sent a5 c3
+  got  RST  (1.1 ms)
+  sent a5 5a 08 a0 00 00 00 01 68 32 c3 69 34 b2 ca 08 fa cd
+  got  SEQ=00000001 MAC=1 STR=1 WIN=1 WR=NEW LAT=000C CNT=0017  (7.2 ms)
+  sent a5 5a 4b 7c 00 00 00 01 28 dd a6 00 35 bd e8 0d a1 77
+  got  SEQ=00000001 MAC=1 STR=0 WIN=0 WR=DUP LAT=000C CNT=0018  (7.2 ms)
+  sent a5 5a 0c 99 00 00 00 04 2a d6 3a 42 70 96 1d 07 ed c3
+  got  SEQ=00000004 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0019  (7.1 ms)
+  sent a5 5a 59 60 00 00 00 25 35 f8 4a cf 83 06 de 09 a9 92
+  got  SEQ=00000025 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=001A  (7.3 ms)
+  sent a5 5a 70 41 00 00 00 ad 64 ba 3f 37 13 22 94 e7 b8 77
+  got  SEQ=000000AD MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=001B  (7.2 ms)
+  sent a5 5a cb 45 00 00 00 af 6d 71 12 41 f8 4a fc 52 5c 74
+  got  SEQ=000000AF MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=001C  (7.5 ms)
+  sent a5 5a b7 b7 00 00 00 b1 9d 31 2e 77 72 f2 7d cd 2a c3
+  got  SEQ=000000B1 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=001D  (7.4 ms)
+  sent a5 5a 5b a1 00 00 00 2d 19 a2 c7 89 80 37 35 7d 45 06
+  got  SEQ=0000002D MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=001E  (7.3 ms)
+  sent a5 5a 70 76 00 00 00 7b 1c a9 8d fa 9c 23 f9 20 39 59
+  got  SEQ=0000007B MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=001F  (7.2 ms)
+  sent a5 5a 0f 1f 00 00 00 b2 9b 29 fc e3 25 a6 2f 37 4a b3
+  got  SEQ=000000B2 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0020  (7.3 ms)
+  sent a5 5a 98 e7 00 00 00 b3 72 0f 08 8f c8 48 70 67 a9 b2
+  got  SEQ=000000B3 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0021  (7.3 ms)
+  sent a5 5a 7c 65 00 00 00 77 4c 0b 5c f0 4e e7 a0 4d 2a ff
+  got  SEQ=00000077 MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=0022  (7.5 ms)
+  sent a5 5a 99 e4 00 00 00 b5 be cc 0e 9c db c2 97 de c3 18
+  got  SEQ=000000B5 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0023  (7.2 ms)
+  sent a5 5a 98 9b 00 00 00 b6 16 cb ac 6d 27 09 fa ce 1b d4
+  got  SEQ=000000B6 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0024  (7.3 ms)
+  sent a5 5a 1c c0 00 00 00 b9 56 a2 b9 e4 ba 04 f9 f8 c9 d1
+  got  SEQ=000000B9 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0025  (7.3 ms)
+  sent a5 5a d8 8f 00 00 01 3a f2 35 3b 9b 41 10 0e dd d7 92
+  got  SEQ=0000013A MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=0026  (7.4 ms)
+  sent a5 5a 13 20 00 00 00 b7 1b 74 49 9e 71 7d d1 26 be e1
+  got  SEQ=000000B7 MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=0027  (7.4 ms)
+  sent a5 5a 37 fc 00 00 01 16 a8 06 66 3e 13 76 22 90 c9 1b
+  got  SEQ=00000116 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0028  (7.4 ms)
+  sent a5 5a c6 27 00 00 00 d6 bf 52 52 46 e8 9f 42 ff 79 85
+  got  SEQ=000000D6 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0029  (7.4 ms)
+  sent a5 5a 04 b1 00 00 01 3d 9e fe 11 0e 22 f4 fc 8e 58 96
+  got  SEQ=0000013D MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=002A  (7.5 ms)
+  sent a5 5a c3 ac 00 00 01 12 5f 2b 7f c2 0f ee d0 b9 ab 34
+  got  SEQ=00000112 MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=002B  (7.2 ms)
+  sent a5 5a 8e c8 00 00 00 c4 e5 05 a3 02 23 cd 89 7a c4 71
+  got  SEQ=000000C4 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=002C  (7.3 ms)
+  sent a5 5a d9 91 00 00 01 3e b9 2b b6 f6 db 7b e4 55 10 35
+  got  SEQ=0000013E MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=002D  (7.3 ms)
+  sent a5 5a f0 d0 00 00 01 3f b8 76 46 6e 34 c3 58 4f c5 66
+  got  SEQ=0000013F MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=002E  (7.5 ms)
+  sent a5 5a 2e 10 00 00 01 34 0b 63 1b 2c 25 04 79 50 95 21
+  got  SEQ=00000134 MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=002F  (7.3 ms)
+  sent a5 5a 3f 78 00 00 02 40 d0 b9 3a e7 fb ef 47 84 a6 fd
+  got  SEQ=00000240 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0030  (7.5 ms)
+  sent a5 5a 4e 5f 00 00 02 43 96 97 11 7f 1b 8b 7f 7b 76 17
+  got  SEQ=00000243 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0031  (7.3 ms)
+  sent a5 5a 00 bf 00 00 02 0e ab 58 58 0d 52 ef 23 9c 59 cc
+  got  SEQ=0000020E MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=0032  (7.5 ms)
+  sent a5 5a 2b da 00 00 02 45 69 37 bc 34 37 2e 68 40 6c 1b
+  got  SEQ=00000245 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0033  (7.5 ms)
+  sent a5 5a 91 7e 00 00 02 46 9f b1 5b f3 eb 82 89 04 51 66
+  got  SEQ=00000246 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0034  (7.4 ms)
+  sent a5 5a a0 07 00 00 02 47 8d 63 f2 13 63 d4 96 1d 83 90
+  got  SEQ=00000247 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0035  (7.5 ms)
+  sent a5 5a a9 15 00 00 01 d3 46 9a b7 d7 86 80 02 45 b9 b4
+  got  SEQ=000001D3 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0036  (7.2 ms)
+  sent a5 5a 58 02 00 00 02 49 f8 11 a8 06 35 d8 66 b9 cf 2d
+  got  SEQ=00000249 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=0037  (7.3 ms)
+  sent a5 5a ab a0 00 00 02 4a a9 d1 bb ac 9e fa 62 26 93 cb
+  got  SEQ=0000024A MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0038  (7.2 ms)
+  sent a5 5a 94 61 00 00 02 16 cb e2 66 50 a9 e1 fc 68 5d 65
+  got  SEQ=00000216 MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=0039  (7.2 ms)
+  sent a5 5a d7 b4 00 00 02 52 8e c4 98 c7 a5 dc 91 9c fa 6f
+  got  SEQ=00000252 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=003A  (7.3 ms)
+  sent a5 5a 0e b7 00 00 03 09 1f 12 20 08 8f ff ca 33 c2 89
+  got  SEQ=00000309 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=003B  (7.3 ms)
+  sent a5 5a 56 36 00 00 03 0a f5 1e 1b 86 60 ae 21 56 de d6
+  got  SEQ=0000030A MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=003C  (7.3 ms)
+  sent a5 5a 4b ea 00 00 03 0b c7 41 ee 49 13 e1 25 1e e0 5e
+  got  SEQ=0000030B MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=003D  (7.2 ms)
+  sent a5 5a 0c fe 00 00 02 96 bd b5 1b 06 90 13 2a 97 6d d7
+  got  SEQ=00000296 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=003E  (7.5 ms)
+  sent a5 5a 04 cd 00 00 02 86 43 cb 05 02 ad b2 dd d0 7d 0f
+  got  SEQ=00000286 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=003F  (7.4 ms)
+  sent a5 5a c5 c9 00 00 03 0c 79 db 44 7d 97 6b f6 44 2a e0
+  got  SEQ=0000030C MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0040  (7.3 ms)
+  sent a5 5a a6 e2 00 00 03 0d 4a 68 97 ee 22 20 6b b1 34 08
+  got  SEQ=0000030D MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0041  (7.2 ms)
+  sent a5 5a c4 44 00 00 02 d2 92 3f aa 19 62 c8 68 e8 1d cf
+  got  SEQ=000002D2 MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=0042  (7.2 ms)
+  sent a5 5a 55 1b 00 00 02 8d de 73 97 6a a9 e8 87 ed 12 b3
+  got  SEQ=0000028D MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0043  (7.4 ms)
+  sent a5 5a 1f 0c 00 00 03 10 c1 d1 2a c8 77 ed ed 6a 11 29
+  got  SEQ=00000310 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0044  (7.3 ms)
+  sent a5 5a f6 9f 00 00 03 11 fd 6b 27 6e 82 26 a6 fb d2 7b
+  got  SEQ=00000311 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0045  (7.2 ms)
+  sent a5 5a a0 3a 00 00 02 a5 30 26 4f 2b 2f 40 6f e7 e2 ba
+  got  SEQ=000002A5 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0046  (7.3 ms)
+  sent a5 5a df 55 00 00 02 9d 42 77 dd 5d 30 31 ac 33 51 5d
+  got  SEQ=0000029D MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0047  (7.3 ms)
+  sent a5 5a 8b 05 00 00 02 88 27 a3 3d e4 7e 6f 87 2f ff a6
+  got  SEQ=00000288 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0048  (7.3 ms)
+  sent a5 5a 5b cf 00 00 02 fb 1a 53 38 73 cf 7e dd cd b4 45
+  got  SEQ=000002FB MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=0049  (7.4 ms)
+  sent a5 5a 08 3a 00 00 04 0d 0d fd d0 9e cb 38 a3 11 cd a6
+  got  SEQ=0000040D MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=004A  (7.2 ms)
+  sent a5 5a 41 3d 00 00 03 99 04 33 c5 ea 58 f0 70 80 ec 9d
+  got  SEQ=00000399 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=004B  (7.4 ms)
+  sent a5 5a ee 42 00 00 03 d0 74 cf 41 51 d0 9d 69 c2 60 9a
+  got  SEQ=000003D0 MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=004C  (7.4 ms)
+  sent a5 5a 2d 9f 00 00 04 f5 c1 b3 64 7a 94 67 6a 2c 97 07
+  got  SEQ=000004F5 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=004D  (7.2 ms)
+  sent a5 5a 58 de 00 00 04 89 51 5a 8f a1 93 8c 3a 99 c8 a5
+  got  SEQ=00000489 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=004E  (7.3 ms)
+  sent a5 5a e1 a4 00 00 04 94 0f ff 33 80 e1 87 3b 89 2e e2
+  got  SEQ=00000494 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=004F  (7.5 ms)
+  sent a5 5a f6 e4 00 00 05 09 67 17 43 52 0c 7e 1e af 55 8f
+  got  SEQ=00000509 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0050  (7.2 ms)
+  sent a5 5a d2 c8 00 00 04 8a cc 6b c6 56 f9 06 e3 a5 9a 18
+  got  SEQ=0000048A MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0051  (7.5 ms)
+  sent a5 5a 70 dd 00 00 06 20 ec 48 14 30 7a 7f ca 8c c9 7d
+  got  SEQ=00000620 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0052  (7.4 ms)
+  sent a5 5a 85 d2 00 00 05 cd 42 44 72 85 e7 b9 85 ed 71 4d
+  got  SEQ=000005CD MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0053  (7.4 ms)
+  sent a5 5a 6a a8 00 00 05 f9 1c d6 c1 bd 1e 4a 4d c8 bc ab
+  got  SEQ=000005F9 MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=0054  (7.5 ms)
+  sent a5 5a 85 93 00 00 06 21 f9 c4 b8 d1 d4 c4 9d c0 6a 2e
+  got  SEQ=00000621 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0055  (7.2 ms)
+  sent a5 5a dd 66 00 00 06 23 d4 51 39 67 4f 89 d0 32 25 e4
+  got  SEQ=00000623 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0056  (7.3 ms)
+  sent a5 5a ee d5 00 00 05 f8 93 e0 bd ae 79 9c 95 41 6a 68
+  got  SEQ=000005F8 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=0057  (7.4 ms)
+  sent a5 5a 79 41 00 00 05 c3 84 04 ff e6 ee a1 f7 ef 98 91
+  got  SEQ=000005C3 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0058  (7.3 ms)
+  sent a5 5a d7 16 00 00 06 25 bd 8a ca a9 5d 79 73 f4 11 52
+  got  SEQ=00000625 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0059  (7.3 ms)
+  sent a5 5a b3 25 00 00 06 b3 29 15 f1 55 73 5e 91 2e 9f 8f
+  got  SEQ=000006B3 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=005A  (7.1 ms)
+  sent a5 5a 04 17 00 00 06 a7 e0 f9 fa 3f b1 1b 99 ad aa 8c
+  got  SEQ=000006A7 MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=005B  (7.3 ms)
+  sent a5 5a 7f a4 00 00 06 2d 39 7f cb d3 87 a2 43 ce 6f c5
+  got  SEQ=0000062D MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=005C  (7.3 ms)
+  sent a5 5a f4 77 00 00 06 2c f3 80 1c 22 a5 5c b6 e3 1e 4a
+  got  SEQ=0000062C MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=005D  (7.2 ms)
+  sent a5 5a 94 d6 00 00 06 b6 4b 58 fa 55 98 14 03 50 f7 2a
+  got  SEQ=000006B6 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=005E  (7.4 ms)
+  sent a5 5a e1 7d 00 00 07 9e 2e 56 0b 8b d4 a6 e9 d9 95 85
+  got  SEQ=0000079E MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=005F  (7.3 ms)
+  sent a5 5a e8 5b 00 00 07 75 70 49 81 fe b6 62 54 22 1d 7e
+  got  SEQ=00000775 MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=0060  (7.5 ms)
+  sent a5 5a a4 02 00 00 08 81 1f a7 c5 dc 8c 3c 33 50 cc 9b
+  got  SEQ=00000881 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=0061  (7.4 ms)
+  sent a5 5a df 5a 00 00 08 66 5b 36 bb 06 5c 90 7d 30 29 21
+  got  SEQ=00000866 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0062  (7.3 ms)
+  sent a5 5a de be 00 00 08 82 1b a2 d9 47 80 75 fc 8a c2 ab
+  got  SEQ=00000882 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0063  (7.2 ms)
+  sent a5 5a f8 21 00 00 08 85 45 32 f8 94 00 0d 6a 5c cd bc
+  got  SEQ=00000885 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0064  (7.1 ms)
+  sent a5 5a e0 a7 00 00 07 fd d0 34 81 8b 7e 1b bf c5 91 9c
+  got  SEQ=000007FD MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0065  (7.3 ms)
+  sent a5 5a 56 92 00 00 08 30 07 13 56 37 69 18 92 e7 ac 90
+  got  SEQ=00000830 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0066  (7.4 ms)
+  sent a5 5a a5 6d 00 00 08 42 5e 71 2f 9a 7a 33 14 98 ea b0
+  got  SEQ=00000842 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0067  (7.5 ms)
+  sent a5 5a de cd 00 00 08 88 e6 05 7f 98 b2 ae b5 7e 3d 9e
+  got  SEQ=00000888 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0068  (7.3 ms)
+  sent a5 5a d0 bb 00 00 08 8b 4a 75 0d 49 98 15 08 ed 58 9f
+  got  SEQ=0000088B MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0069  (7.3 ms)
+  sent a5 5a e7 f4 00 00 08 8d ed 2a b1 99 3d bf 6c 11 38 18
+  got  SEQ=0000088D MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=006A  (7.3 ms)
+  sent a5 5a aa 09 00 00 08 8f 95 35 21 7b 31 9b e5 a1 e3 8f
+  got  SEQ=0000088F MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=006B  (7.3 ms)
+  sent a5 5a 7a f8 00 00 08 93 b2 1e 67 20 b4 84 f5 df d1 48
+  got  SEQ=00000893 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=006C  (7.4 ms)
+  sent a5 5a 2c 1f 00 00 08 95 05 28 de 41 41 86 af 94 67 26
+  got  SEQ=00000895 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=006D  (7.2 ms)
+  sent a5 5a 49 ba 00 00 08 97 ab 3c 5f cb a8 de 90 82 cc 43
+  got  SEQ=00000897 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=006E  (7.5 ms)
+  sent a5 5a c2 9f 00 00 08 d2 8e 58 97 48 c3 67 d0 45 75 cd
+  got  SEQ=000008D2 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=006F  (7.4 ms)
+  sent a5 5a 52 85 00 00 08 6f c0 c7 5e e1 89 cd 18 a2 6d 1f
+  got  SEQ=0000086F MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=0070  (7.2 ms)
+  sent a5 5a bd eb 00 00 08 fe 4e 1b c6 f4 67 0e d0 a2 00 45
+  got  SEQ=000008FE MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=0071  (7.3 ms)
+  sent a5 5a 12 7a 00 00 08 b4 c7 30 e9 ad cd 8d 14 63 1f 2d
+  got  SEQ=000008B4 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0072  (7.4 ms)
+  sent a5 5a a7 9e 00 00 09 00 8d 5e bb 00 a3 a7 2b 69 f7 96
+  got  SEQ=00000900 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0073  (7.4 ms)
+  sent a5 5a 9c 49 00 00 09 01 01 d9 65 c5 82 d1 30 58 a6 1b
+  got  SEQ=00000901 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=0074  (7.4 ms)
+  sent a5 5a a1 62 00 00 08 76 e3 a0 75 fc 02 0a dd 52 ff 8e
+  got  SEQ=00000876 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0075  (7.4 ms)
+  sent a5 5a f2 4a 00 00 08 a2 64 46 8c 82 6a 70 f6 b8 5a b3
+  got  SEQ=000008A2 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0076  (7.4 ms)
+  sent a5 5a 90 0d 00 00 09 03 b6 3a a7 f3 97 44 35 97 c5 ae
+  got  SEQ=00000903 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0077  (7.3 ms)
+  sent a5 5a 2b e3 00 00 09 05 15 c4 e3 25 4c e2 45 f3 87 4b
+  got  SEQ=00000905 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0078  (7.4 ms)
+  sent a5 5a 15 a0 00 00 09 06 66 78 c1 2b 80 9d cf b1 1a be
+  got  SEQ=00000906 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0079  (7.3 ms)
+  sent a5 5a 94 84 00 00 09 07 c8 fe 2c fd 82 4a 83 c5 94 5b
+  got  SEQ=00000907 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=007A  (7.4 ms)
+  sent a5 5a 4f 1d 00 00 09 0a 89 72 e1 34 aa da 0b 74 f1 62
+  got  SEQ=0000090A MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=007B  (7.5 ms)
+  sent a5 5a be 0e 00 00 09 0b 3c da 38 c6 44 61 11 d0 2c 45
+  got  SEQ=0000090B MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=007C  (7.5 ms)
+  sent a5 5a 68 d5 00 00 09 0d cc 24 3e ae 67 24 23 d5 3a 54
+  got  SEQ=0000090D MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=007D  (7.3 ms)
+  sent a5 5a 0e 56 00 00 08 c1 97 2a 6a f2 f0 eb 8e 13 c3 ef
+  got  SEQ=000008C1 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=007E  (7.3 ms)
+  sent a5 5a c8 75 00 00 09 0f 0c e3 18 43 e1 c8 3c ea 6b 36
+  got  SEQ=0000090F MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=007F  (7.2 ms)
+  sent a5 5a f6 c4 00 00 08 9c 5d bb ac 43 fe 9a c9 05 24 69
+  got  SEQ=0000089C MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0080  (13.7 ms)
+  sent a5 5a 1a fc 00 00 09 10 9f bf 1c 4f db 66 e5 8c 5e b8
+  got  SEQ=00000910 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0081  (7.3 ms)
+  sent a5 5a 74 1d 00 00 08 aa b3 53 05 a0 07 30 46 13 3f 51
+  got  SEQ=000008AA MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0082  (7.4 ms)
+  sent a5 5a 28 03 00 00 08 f4 b1 61 f7 b3 0f bd 4c f1 88 11
+  got  SEQ=000008F4 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=0083  (7.2 ms)
+  sent a5 5a 3e 61 00 00 09 12 23 2f 9f fa 04 83 e1 51 18 db
+  got  SEQ=00000912 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0084  (7.3 ms)
+  sent a5 5a a3 ed 00 00 09 4b e7 36 7a 87 0b b0 b4 7f 32 5f
+  got  SEQ=0000094B MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=0085  (7.3 ms)
+  sent a5 5a 84 38 00 00 09 4d 48 37 bd 24 c3 ff 7b 77 bf 33
+  got  SEQ=0000094D MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0086  (7.3 ms)
+  sent a5 5a a9 63 00 00 08 d1 a2 12 82 20 e1 f1 48 6b b8 53
+  got  SEQ=000008D1 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=0087  (7.2 ms)
+  sent a5 5a 2b af 00 00 08 e6 bb ac 19 c2 26 89 e9 54 34 03
+  got  SEQ=000008E6 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0088  (7.3 ms)
+  sent a5 5a 32 5d 00 00 08 df fb a6 7e 9a 53 ae 0c 01 58 67
+  got  SEQ=000008DF MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0089  (7.3 ms)
+  sent a5 5a 33 90 00 00 09 e3 36 eb e1 f4 e0 7b ed d3 a8 15
+  got  SEQ=000009E3 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=008A  (7.3 ms)
+  sent a5 5a 59 90 00 00 09 9f 5a f7 bc de c5 a4 77 c0 eb cd
+  got  SEQ=0000099F MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=008B  (7.5 ms)
+  sent a5 5a 58 54 00 00 09 7b ac 08 5f 4b c2 bd aa ee 82 c2
+  got  SEQ=0000097B MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=008C  (7.4 ms)
+  sent a5 5a c8 ed 00 00 09 e6 cb 27 09 3d f3 75 6b ab 1a e6
+  got  SEQ=000009E6 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=008D  (7.2 ms)
+  sent a5 5a 34 e1 00 00 09 83 2a 4e 2c e9 49 4a c5 2f d6 2b
+  got  SEQ=00000983 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=008E  (7.5 ms)
+  sent a5 5a eb 9c 00 00 09 f6 5f b7 e9 65 0e ed 52 b0 b8 c2
+  got  SEQ=000009F6 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=008F  (7.6 ms)
+  sent a5 5a c2 32 00 00 09 f8 07 cc 13 f3 cb 3f 49 29 50 e8
+  got  SEQ=000009F8 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0090  (7.6 ms)
+  sent a5 5a 65 32 00 00 09 f9 55 5b 25 ad 64 74 7a a1 03 23
+  got  SEQ=000009F9 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0091  (7.3 ms)
+  sent a5 5a 32 80 00 00 09 aa 54 12 4a 19 fb 9e 14 9f f3 f1
+  got  SEQ=000009AA MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0092  (7.3 ms)
+  sent a5 5a 8d 45 00 00 0b 03 af c3 2d 81 04 f7 46 9c 28 2a
+  got  SEQ=00000B03 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0093  (7.2 ms)
+  sent a5 5a 36 d5 00 00 0b 05 4c 78 35 b3 bc 73 fd 6c ac b2
+  got  SEQ=00000B05 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0094  (7.3 ms)
+  sent a5 5a d2 5f 00 00 0a 8f 5b 97 d8 43 8a 17 0f 39 19 1a
+  got  SEQ=00000A8F MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0095  (7.3 ms)
+  sent a5 5a d7 ce 00 00 0a 94 14 50 ce 06 bf e7 d8 50 e4 f7
+  got  SEQ=00000A94 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=0096  (7.4 ms)
+  sent a5 5a 54 10 00 00 0b 06 8a 1b e7 7e d8 21 7f 67 bc 93
+  got  SEQ=00000B06 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=0097  (7.3 ms)
+  sent a5 5a f3 56 00 00 0a f0 19 ae 11 a0 3e cc 7a 57 b6 57
+  got  SEQ=00000AF0 MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=0098  (7.2 ms)
+  sent a5 5a e6 dc 00 00 0b 08 14 2d dd e2 ae 4c b1 b5 a5 c4
+  got  SEQ=00000B08 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0099  (7.3 ms)
+  sent a5 5a 08 92 00 00 0a 80 dc cf 8b b1 98 88 b9 e0 47 cd
+  got  SEQ=00000A80 MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=009A  (7.3 ms)
+  sent a5 5a 3b 2a 00 00 0a fe 90 c3 05 5f 9b 45 67 1e 63 3c
+  got  SEQ=00000AFE MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=009B  (7.2 ms)
+  sent a5 5a a5 a8 00 00 0a 8d 45 17 37 43 8e cf 3b c1 cc 74
+  got  SEQ=00000A8D MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=009C  (7.5 ms)
+  sent a5 5a dd a6 00 00 0b a8 cc c5 34 6f c0 a6 28 c9 ff 57
+  got  SEQ=00000BA8 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=009D  (7.5 ms)
+  sent a5 5a c3 1b 00 00 0b ab b3 ba 79 19 bd 16 b3 10 04 9e
+  got  SEQ=00000BAB MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=009E  (7.4 ms)
+  sent a5 5a 58 ac 00 00 0b ae ff 24 30 a7 00 47 1b 3c da be
+  got  SEQ=00000BAE MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=009F  (7.3 ms)
+  sent a5 5a 91 0f 00 00 0b b0 15 97 bd 7a d8 07 66 1c c1 02
+  got  SEQ=00000BB0 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=00A0  (7.2 ms)
+  sent a5 5a d3 63 00 00 0b 4a 4f 22 41 96 c2 ba a1 d0 c8 64
+  got  SEQ=00000B4A MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=00A1  (7.2 ms)
+  sent a5 5a f3 20 00 00 0b 2e 36 37 e5 ef 5f 7f f0 24 03 a9
+  got  SEQ=00000B2E MAC=1 STR=0 WIN=0 WR=STL LAT=000C CNT=00A2  (7.2 ms)
+  sent a5 5a 93 a2 00 00 0b 7b 29 f7 f3 0d 7c 7a 86 c0 e2 a1
+  got  SEQ=00000B7B MAC=1 STR=0 WIN=1 WR=INW LAT=000C CNT=00A3  (7.5 ms)
+  sent a5 5a f2 22 00 00 0b ab 40 80 10 67 24 be f6 5e c8 5b
+  got  SEQ=00000BAB MAC=1 STR=0 WIN=0 WR=DUP LAT=000C CNT=00A4  (7.4 ms)
+  sent a5 5a 39 2f 00 00 0b b2 53 d5 5f 37 cd 62 26 d6 09 ed
+  got  SEQ=00000BB2 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=00A5  (7.2 ms)
+  sent a5 5a 16 d2 00 00 0b b3 f0 f3 b9 26 57 3d a0 1a 0b 3f
+  got  SEQ=00000BB3 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=00A6  (7.4 ms)
+  sent a5 5a 96 cf 00 00 0b b5 aa d6 20 dd 41 38 cf e4 cc ce
+  got  SEQ=00000BB5 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=00A7  (7.4 ms)
+  sent a5 5a 50 0f 00 00 0b b7 10 76 4a 55 a7 a7 1d 5d ba 74
+  got  SEQ=00000BB7 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=00A8  (7.3 ms)
+  sent a5 5a 76 af 00 00 0b b8 b7 28 91 ac 3e c4 8e c7 9f 1d
+  got  SEQ=00000BB8 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=00A9  (7.3 ms)
+  sent a5 5a ef 4b 00 00 0b bb fb 57 3b 66 ef 43 a2 b7 ac 1b
+  got  SEQ=00000BBB MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=00AA  (7.4 ms)
+  sent a5 5a 8a f3 00 00 0b d9 ee cb b4 49 86 ee 1a 32 25 9d
+  got  SEQ=00000BD9 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=00AB  (7.5 ms)
+  sent a5 5a 88 28 00 00 0d 00 2b 75 2d d7 21 ca eb 4f 71 55
+  got  SEQ=00000D00 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=00AC  (7.4 ms)
+latency_cycles=[12] avg_round_trip_ms=7.37

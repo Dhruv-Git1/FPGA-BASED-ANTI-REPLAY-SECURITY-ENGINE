@@ -1,0 +1,28 @@
+  cut-off frame -> ERR
+== normal_ooo_dup
+  sent a5 c3
+  got  RST  (2.2 ms)
+  sent a5 5a 00 01 00 00 00 01 10 01 01 aa 7a 98 50 a0 7d 18
+  got  SEQ=00000001 MAC=1 STR=1 WIN=1 WR=NEW LAT=000C CNT=00AD  (7.5 ms)
+  sent a5 5a 00 01 00 00 00 02 10 02 21 e1 a8 1e c6 28 97 e1
+  got  SEQ=00000002 MAC=1 STR=1 WIN=1 WR=NEW LAT=000C CNT=00AE  (7.2 ms)
+  sent a5 5a 00 01 00 00 00 04 10 04 4d 2a 4d 8a 22 ff 8b e6
+  got  SEQ=00000004 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=00AF  (7.3 ms)
+  sent a5 5a 00 01 00 00 00 03 10 03 bd d4 4f 7e 81 8c 78 67
+  got  SEQ=00000003 MAC=1 STR=1 WIN=1 WR=INW LAT=000C CNT=00B0  (7.2 ms)
+  sent a5 5a 00 01 00 00 00 03 10 03 bd d4 4f 7e 81 8c 78 67
+  got  SEQ=00000003 MAC=1 STR=0 WIN=0 WR=DUP LAT=000C CNT=00B1  (7.4 ms)
+== auth_isolation
+  sent a5 c3
+  got  RST  (1.5 ms)
+  sent a5 5a 00 01 00 00 00 01 20 01 41 26 66 af d7 7f 13 59
+  got  SEQ=00000001 MAC=1 STR=1 WIN=1 WR=NEW LAT=000C CNT=00B2  (7.4 ms)
+  sent a5 5a 00 01 00 00 00 02 20 03 3e 5f e7 5b 33 57 94 37
+  got  SEQ=00000002 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=00B3  (7.6 ms)
+  sent a5 5a 00 01 00 00 00 02 20 02 3f 5f e7 5b 33 57 94 37
+  got  SEQ=00000002 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=00B4  (7.5 ms)
+  sent a5 5a 00 01 00 0f 42 40 20 02 3e 5f e7 5b 33 57 94 37
+  got  SEQ=000F4240 MAC=0 STR=0 WIN=0 WR=AUT LAT=000C CNT=00B5  (7.3 ms)
+  sent a5 5a 00 01 00 00 00 02 20 02 3e 5f e7 5b 33 57 94 37
+  got  SEQ=00000002 MAC=1 STR=1 WIN=1 WR=NEW LAT=000C CNT=00B6  (7.2 ms)
+latency_cycles=[12] avg_round_trip_ms=7.36

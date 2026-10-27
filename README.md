@@ -62,7 +62,29 @@ uart_rx --> frame_parser --> auth_stage (siphash24) --+--> strict_counter --+
 
 **Telemetry.** Each verdict produces one ASCII line, for example `SEQ=00000004 MAC=1 STR=0 WIN=1 WR=NEW LAT=000C CNT=0005`. `LAT` is the number of clocks from `frame_valid` to the verdict. Reset and parser errors produce `RST` and `ERR`. The host waits for each line before sending the next frame.
 
-**LEDs.** LD0 toggles per frame. LD1 is MAC ok and LD2 is MAC failed. LD3 is strict accept and LD4 is window accept. LD5 is window duplicate and LD6 is window stale. LD7 is a heartbeat.
+**OLED screen.** The on-board 128x32 OLED shows 4 lines of text. `oled_status.v` chooses the text and `oled_ssd1306.v` powers the screen up and redraws it continuously. For each packet the lines appear one stage at a time.
+
+```text
+RX  SEQ=00000003      frame received, with its sequence number
+AUTH OK   12 CLK      tag check result, clocks from frame to verdict
+STRICT: REJECT        strict counter decision
+WINDOW: REPLAY!       sliding window decision: OK NEW, OK LATE, REPLAY! or TOO OLD
+```
+
+A failed tag check shows `AUTH FAILED!`, then `STRICT UNCHANGED` and `WINDOW UNCHANGED`, because neither engine's state is touched. Other screens cover boot (with a loading bar), idle (window size and packet count), session reset, frame error, and the host's final PASS or FAIL. The font is the public-domain `font8x8` set, converted by `host/gen_font.py` into `rtl/font8x8_rom.v`.
+
+**LEDs.** `led_display.v` replays each event slowly enough to see. It only reads events and never touches replay state.
+
+| Event | LED behaviour |
+|---|---|
+| Design loaded or reset | One light sweeps back and forth twice |
+| Idle | LD7 heartbeat only |
+| Packet checked | Lights fill in at 0.25 s per stage. LD0 received. LD1 MAC ok or LD2 MAC failed. LD3 strict accepted. LD4 window accepted, LD5 duplicate or LD6 stale. The result is then held. Rejection reasons (LD2, LD5, LD6) blink. |
+| Session reset | All eight flash twice |
+| Broken frame | LD0 blinks quickly |
+| Host sends `A5 E1` or `A5 E0` | PASS fills the LEDs one by one, then all stay on. FAIL makes all eight blink. `demo.py` sends one of these at the end of a run. |
+
+`python host/demo.py --port COM8 --w 64 --watch 1.5 --only normal_ooo_dup` sends one packet every 1.5 s so the stages can be followed.
 
 ## Evaluation
 
@@ -80,10 +102,10 @@ The 115200-baud link limits packet rate to roughly 640 frames per second before 
 
 | Path | Contents |
 |---|---|
-| `rtl/` | `siphash24.v`, `auth_stage.v`, `strict_counter.v`, `sliding_window.v`, `uart_rx.v`, `uart_tx.v`, `frame_parser.v`, `telemetry.v`, `top_zedboard.v` |
-| `constraints/` | `zedboard_base.xdc` (clock, LEDs, button) and `pmod_uart.xdc` (Pmod pins), from the Digilent ZedBoard board file |
+| `rtl/` | `siphash24.v`, `auth_stage.v`, `strict_counter.v`, `sliding_window.v`, `uart_rx.v`, `uart_tx.v`, `frame_parser.v`, `telemetry.v`, `led_display.v`, `oled_status.v`, `oled_ssd1306.v`, `font8x8_rom.v`, `top_zedboard.v` |
+| `constraints/` | `zedboard_base.xdc` (clock, LEDs, button, OLED) and `pmod_uart.xdc` (Pmod pins), from the Digilent ZedBoard board file |
 | `rtl/top_zedboard_ps.v`, `sw/uart_bridge/` | `ps` variant: Zynq processor block plus the bare-metal ARM byte relay |
-| `sim/` | `tb_siphash24.sv`, `tb_replay.sv`, `tb_top.sv`, and generated `vectors/` |
+| `sim/` | `tb_siphash24.sv`, `tb_replay.sv`, `tb_top.sv`, `tb_led_display.sv`, `tb_oled.sv`, and generated `vectors/` |
 | `host/` | `siphash.py`, `packet.py`, `replay_model.py`, `scenarios.py`, `telemetry.py`, `gen_vectors.py`, `demo.py` |
 | `tests/` | pytest checks of the golden models |
 | `scripts/` | `run_sim.py`, `build.py`, `build.tcl`, `program.tcl`, `program_ps.tcl` |

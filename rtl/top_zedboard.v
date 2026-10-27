@@ -3,27 +3,31 @@
 // PC --USB--> Pmod USBUART on JA --uart_rx--> frame_parser --> auth_stage
 //   --> strict_counter and sliding_window in parallel --> LEDs and telemetry --> PC
 //
-// LEDs, held until the next packet:
-//   0 frame received (toggles)   1 MAC ok           2 MAC failed
-//   3 strict engine accepted     4 window accepted  5 window duplicate
-//   6 window stale               7 heartbeat (design is running)
+// LEDs are driven by led_display.v and the on-board OLED by oled_status.v and
+// oled_ssd1306.v. Both replay each event slowly enough to follow.
 // BTNC, or the frame A5 C3, starts a new replay test session.
+// The frames A5 E1 and A5 E0 let the host show an overall test PASS or FAIL.
 module top_zedboard #(
     parameter W               = 64,
     parameter CLK_HZ          = 100_000_000,
     parameter BAUD            = 115_200,
     parameter TIMEOUT_CYCLES  = 1_000_000,   // 10 ms gap abandons a frame
     parameter DEBOUNCE_CYCLES = 1_000_000,   // 10 ms button debounce
-    parameter HEARTBEAT_BIT   = 26           // about 0.67 s per toggle
+    parameter LED_TICK_CYCLES = 12_500_000   // 125 ms per LED display step
 ) (
     input  wire       clk,
     input  wire       btn_c,
     input  wire       uart_rx,
     output wire       uart_tx,
-    output reg  [7:0] led
+    output wire [7:0] led,
+    output wire       oled_sdin,
+    output wire       oled_sclk,
+    output wire       oled_dc,
+    output wire       oled_res,
+    output wire       oled_vbat,
+    output wire       oled_vdd
 );
     localparam CLKS_PER_BIT = CLK_HZ / BAUD;
-    localparam [2:0] R_DUP = 3'd2, R_STL = 3'd3;
 
     // Power-on reset: hold everything in reset for the first 16 clocks.
     reg [3:0] por_cnt = 4'd0;
@@ -53,7 +57,7 @@ module top_zedboard #(
     wire [7:0]   rx_data;
     wire         rx_valid, rx_err;
     wire [127:0] frame;
-    wire         frame_valid, reset_req, parse_err;
+    wire         frame_valid, reset_req, parse_err, host_pass, host_fail;
 
     uart_rx #(.CLKS_PER_BIT(CLKS_PER_BIT)) u_rx (
         .clk(clk), .rst(rst), .rx(uart_rx),
@@ -62,7 +66,8 @@ module top_zedboard #(
 
     frame_parser #(.TIMEOUT_CYCLES(TIMEOUT_CYCLES)) u_parser (
         .clk(clk), .rst(rst), .byte_valid(rx_valid), .byte_data(rx_data), .byte_err(rx_err),
-        .frame_valid(frame_valid), .frame(frame), .reset_req(reset_req), .parse_err(parse_err)
+        .frame_valid(frame_valid), .frame(frame), .reset_req(reset_req),
+        .host_pass(host_pass), .host_fail(host_fail), .parse_err(parse_err)
     );
 
     wire session_clear = reset_req || btn_press;
@@ -128,26 +133,32 @@ module top_zedboard #(
         .tx(uart_tx)
     );
 
-    // LEDs.
-    reg [31:0] heartbeat = 32'd0;
-    always @(posedge clk) begin
-        heartbeat <= heartbeat + 32'd1;
-        led[7]    <= heartbeat[HEARTBEAT_BIT];
-        if (rst) begin
-            led[6:0] <= 7'd0;
-        end else begin
-            if (frame_valid)
-                led[0] <= ~led[0];
-            if (session_clear) begin
-                led[6:1] <= 6'd0;
-            end else if (verdict_valid) begin
-                led[1] <= mac_ok_d;
-                led[2] <= ~mac_ok_d;
-                led[3] <= strict_accept;
-                led[4] <= window_accept;
-                led[5] <= (window_reason == R_DUP);
-                led[6] <= (window_reason == R_STL);
-            end
-        end
-    end
+    led_display #(.TICK_CYCLES(LED_TICK_CYCLES)) u_leds (
+        .clk(clk), .rst(rst),
+        .verdict_valid(verdict_valid), .mac_ok(mac_ok_d),
+        .strict_accept(strict_accept), .window_accept(window_accept),
+        .window_reason(window_reason),
+        .session_clear(session_clear), .parse_err(parse_err),
+        .host_pass(host_pass), .host_fail(host_fail),
+        .led(led)
+    );
+
+    wire [1:0] oled_row;
+    wire [3:0] oled_col;
+    wire [6:0] oled_ch;
+    oled_status #(.W(W), .TICK_CYCLES(LED_TICK_CYCLES)) u_oled_text (
+        .clk(clk), .rst(rst),
+        .verdict_valid(verdict_valid), .mac_ok(mac_ok_d),
+        .strict_accept(strict_accept), .window_accept(window_accept),
+        .window_reason(window_reason), .seq(seq), .latency(lat_cnt),
+        .session_clear(session_clear), .parse_err(parse_err),
+        .host_pass(host_pass), .host_fail(host_fail),
+        .row(oled_row), .col(oled_col), .ch(oled_ch)
+    );
+
+    oled_ssd1306 #(.DELAY_1MS(CLK_HZ / 1000), .DELAY_100MS(CLK_HZ / 10)) u_oled (
+        .clk(clk), .rst(rst), .row(oled_row), .col(oled_col), .ch(oled_ch),
+        .sdin(oled_sdin), .sclk(oled_sclk), .dc(oled_dc),
+        .res_n(oled_res), .vbat_n(oled_vbat), .vdd_n(oled_vdd)
+    );
 endmodule

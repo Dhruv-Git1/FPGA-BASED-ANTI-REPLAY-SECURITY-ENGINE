@@ -30,9 +30,11 @@ The serial line reaches `top_zedboard` in one of two ways.
 4. **`strict_counter`** and **`sliding_window`** both act on `auth_done` in the same clock. Neither engine changes state when `mac_ok` is low. Both pulse `out_valid` one clock later.
 5. The top level counts clocks from `frame_valid` to the verdict as `LAT`. It also counts verdicts as `CNT`.
 6. **`telemetry`** copies the verdict and sends one text line through **`uart_tx`**. `reset_req`, the BTNC button and `parse_err` produce `RST` or `ERR` lines.
-7. The LED register is updated from the same verdict.
+7. **`led_display`** receives the same verdict and plays it back as a stage-by-stage light pattern. It also shows the boot sweep, `session_clear`, `parse_err`, and the host's `A5 E1` or `A5 E0` result frames, which the parser reports as `host_pass` and `host_fail`.
 
-`session_clear` (the A5 C3 frame or the BTNC button) clears both engines and LEDs 1 to 6.
+8. **`oled_status`** receives the same events and keeps the text for 4 screen lines. **`oled_ssd1306`** asks it for one character at a time, looks up each 8-pixel column in **`font8x8_rom`**, and sends the bytes to the screen over SPI. It redraws the full 512-byte picture continuously.
+
+`session_clear` (the A5 C3 frame or the BTNC button) clears both engines. The LED display only reads events, so an LED fault cannot affect a verdict.
 
 ## 3. Where errors can originate
 
@@ -47,7 +49,7 @@ The serial line reaches `top_zedboard` in one of two ways.
 ## 4. Verification and build flow
 
 1. `scripts/run_sim.py` runs `gen_vectors.py`, then compiles `rtl/` and `sim/` with xvlog. It elaborates each testbench per W with xelab and runs xsim.
-2. `tb_siphash24` checks the core alone. `tb_replay` checks both engines and their state isolation. `tb_top` drives UART waveforms into `top_zedboard` and checks the telemetry text.
+2. `tb_siphash24` checks the core alone. `tb_replay` checks both engines and their state isolation. `tb_top` drives UART waveforms into `top_zedboard` and checks the telemetry text. `tb_led_display` checks every LED pattern with a shortened display step. `tb_oled` decodes the OLED's SPI bytes back into a picture, reads the text with the same font, and checks each screen and the power-up order.
 3. `scripts/build.py` runs `scripts/build.tcl` in Vivado once per W. Reports go to `reports/W<W>/`, bitstreams to `build/W<W>/`. It then writes `reports/summary.md`.
 4. `scripts/build.py --program W` runs `scripts/program.tcl` to load a bitstream over JTAG.
 5. `scripts/build.py --variant ps` compiles `sw/uart_bridge` with the Vitis ARM compiler and runs `build.tcl` in `ps` mode. That mode generates the Zynq block design and copies `ps7_init.tcl`. `--variant ps --program W` runs `scripts/program_ps.tcl` in xsdb. It loads the bitstream, initializes the processor, loads the bridge program and starts it.

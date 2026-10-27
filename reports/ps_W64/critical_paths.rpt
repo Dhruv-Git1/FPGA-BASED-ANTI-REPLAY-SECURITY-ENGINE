@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2024.2 (win64) Build 5239630 Fri Nov 08 22:35:27 MST 2024
-| Date         : Tue Oct 27 15:16:20 2026
+| Date         : Tue Oct 27 16:02:17 2026
 | Host         : hp running 64-bit major release  (build 9200)
 | Command      : report_timing -max_paths 5 -nworst 1 -path_type full -file reports/ps_W64/critical_paths.rpt
 | Design       : top_zedboard_ps
@@ -12,7 +12,7 @@ Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanc
 
 Timing Report
 
-Slack (MET) :             1.691ns  (required time - arrival time)
+Slack (MET) :             1.597ns  (required time - arrival time)
   Source:                 u_core/u_auth/u_sip/v1_reg[1]/C
                             (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
   Destination:            u_core/u_auth/u_sip/v3_reg[59]/D
@@ -20,12 +20,12 @@ Slack (MET) :             1.691ns  (required time - arrival time)
   Path Group:             sys_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (sys_clk rise@10.000ns - sys_clk rise@0.000ns)
-  Data Path Delay:        8.116ns  (logic 5.359ns (66.030%)  route 2.757ns (33.970%))
+  Data Path Delay:        8.367ns  (logic 5.348ns (63.914%)  route 3.019ns (36.086%))
   Logic Levels:           28  (CARRY4=24 LUT2=1 LUT3=1 LUT4=1 LUT5=1)
-  Clock Path Skew:        -0.189ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    5.023ns = ( 15.023 - 10.000 ) 
-    Source Clock Delay      (SCD):    5.492ns
-    Clock Pessimism Removal (CPR):    0.280ns
+  Clock Path Skew:        -0.032ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    5.013ns = ( 15.013 - 10.000 ) 
+    Source Clock Delay      (SCD):    5.474ns
+    Clock Pessimism Removal (CPR):    0.429ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -36,119 +36,119 @@ Slack (MET) :             1.691ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
                          (clock sys_clk rise edge)    0.000     0.000 r  
                          propagated clock network latency
-                                                      5.492     5.492    
-    SLICE_X65Y49         FDRE                         0.000     5.492 r  u_core/u_auth/u_sip/v1_reg[1]/C
-    SLICE_X65Y49         FDRE (Prop_fdre_C_Q)         0.456     5.948 r  u_core/u_auth/u_sip/v1_reg[1]/Q
-                         net (fo=4, routed)           0.756     6.704    u_core/u_auth/u_sip/v1[1]
-    SLICE_X64Y45         LUT2 (Prop_lut2_I1_O)        0.124     6.828 r  u_core/u_auth/u_sip/i__carry_i_3__0/O
-                         net (fo=1, routed)           0.000     6.828    u_core/u_auth/u_sip/i__carry_i_3__0_n_0
-    SLICE_X64Y45         CARRY4 (Prop_carry4_S[1]_CO[3])
-                                                      0.550     7.378 r  u_core/u_auth/u_sip/x_inferred__2/i__carry/CO[3]
-                         net (fo=1, routed)           0.000     7.378    u_core/u_auth/u_sip/x_inferred__2/i__carry_n_0
-    SLICE_X64Y46         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.492 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__0/CO[3]
-                         net (fo=1, routed)           0.000     7.492    u_core/u_auth/u_sip/x_inferred__2/i__carry__0_n_0
-    SLICE_X64Y47         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.606 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__1/CO[3]
-                         net (fo=1, routed)           0.000     7.606    u_core/u_auth/u_sip/x_inferred__2/i__carry__1_n_0
-    SLICE_X64Y48         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.720 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__2/CO[3]
-                         net (fo=1, routed)           0.000     7.720    u_core/u_auth/u_sip/x_inferred__2/i__carry__2_n_0
-    SLICE_X64Y49         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.834 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__3/CO[3]
-                         net (fo=1, routed)           0.001     7.835    u_core/u_auth/u_sip/x_inferred__2/i__carry__3_n_0
-    SLICE_X64Y50         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.949 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__4/CO[3]
-                         net (fo=1, routed)           0.000     7.949    u_core/u_auth/u_sip/x_inferred__2/i__carry__4_n_0
-    SLICE_X64Y51         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     8.063 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__5/CO[3]
-                         net (fo=1, routed)           0.000     8.063    u_core/u_auth/u_sip/x_inferred__2/i__carry__5_n_0
-    SLICE_X64Y52         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     8.177 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__6/CO[3]
-                         net (fo=1, routed)           0.000     8.177    u_core/u_auth/u_sip/x_inferred__2/i__carry__6_n_0
-    SLICE_X64Y53         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     8.291 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__7/CO[3]
-                         net (fo=1, routed)           0.000     8.291    u_core/u_auth/u_sip/x_inferred__2/i__carry__7_n_0
-    SLICE_X64Y54         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     8.405 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__8/CO[3]
-                         net (fo=1, routed)           0.000     8.405    u_core/u_auth/u_sip/x_inferred__2/i__carry__8_n_0
-    SLICE_X64Y55         CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.334     8.739 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__9/O[1]
-                         net (fo=5, routed)           1.026     9.765    u_core/u_auth/u_sip/x1_out[41]
-    SLICE_X62Y46         LUT3 (Prop_lut3_I0_O)        0.303    10.068 r  u_core/u_auth/u_sip/v01_carry__1_i_3/O
-                         net (fo=1, routed)           0.000    10.068    u_core/u_auth/u_sip/v01_carry__1_i_3_n_0
-    SLICE_X62Y46         CARRY4 (Prop_carry4_S[1]_CO[3])
-                                                      0.533    10.601 r  u_core/u_auth/u_sip/v01_carry__1/CO[3]
-                         net (fo=1, routed)           0.000    10.601    u_core/u_auth/u_sip/v01_carry__1_n_0
-    SLICE_X62Y47         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    10.718 r  u_core/u_auth/u_sip/v01_carry__2/CO[3]
-                         net (fo=1, routed)           0.000    10.718    u_core/u_auth/u_sip/v01_carry__2_n_0
-    SLICE_X62Y48         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    10.835 r  u_core/u_auth/u_sip/v01_carry__3/CO[3]
-                         net (fo=1, routed)           0.000    10.835    u_core/u_auth/u_sip/v01_carry__3_n_0
-    SLICE_X62Y49         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    10.952 r  u_core/u_auth/u_sip/v01_carry__4/CO[3]
-                         net (fo=1, routed)           0.001    10.952    u_core/u_auth/u_sip/v01_carry__4_n_0
-    SLICE_X62Y50         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    11.069 r  u_core/u_auth/u_sip/v01_carry__5/CO[3]
-                         net (fo=1, routed)           0.000    11.069    u_core/u_auth/u_sip/v01_carry__5_n_0
-    SLICE_X62Y51         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    11.186 r  u_core/u_auth/u_sip/v01_carry__6/CO[3]
-                         net (fo=1, routed)           0.000    11.186    u_core/u_auth/u_sip/v01_carry__6_n_0
-    SLICE_X62Y52         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    11.303 r  u_core/u_auth/u_sip/v01_carry__7/CO[3]
-                         net (fo=1, routed)           0.000    11.303    u_core/u_auth/u_sip/v01_carry__7_n_0
-    SLICE_X62Y53         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    11.420 r  u_core/u_auth/u_sip/v01_carry__8/CO[3]
-                         net (fo=1, routed)           0.000    11.420    u_core/u_auth/u_sip/v01_carry__8_n_0
-    SLICE_X62Y54         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    11.537 r  u_core/u_auth/u_sip/v01_carry__9/CO[3]
-                         net (fo=1, routed)           0.000    11.537    u_core/u_auth/u_sip/v01_carry__9_n_0
-    SLICE_X62Y55         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    11.654 r  u_core/u_auth/u_sip/v01_carry__10/CO[3]
-                         net (fo=1, routed)           0.000    11.654    u_core/u_auth/u_sip/v01_carry__10_n_0
-    SLICE_X62Y56         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    11.771 r  u_core/u_auth/u_sip/v01_carry__11/CO[3]
-                         net (fo=1, routed)           0.000    11.771    u_core/u_auth/u_sip/v01_carry__11_n_0
-    SLICE_X62Y57         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    11.888 r  u_core/u_auth/u_sip/v01_carry__12/CO[3]
-                         net (fo=1, routed)           0.000    11.888    u_core/u_auth/u_sip/v01_carry__12_n_0
-    SLICE_X62Y58         CARRY4 (Prop_carry4_CI_O[3])
-                                                      0.315    12.203 r  u_core/u_auth/u_sip/v01_carry__13/O[3]
-                         net (fo=2, routed)           0.529    12.732    u_core/u_auth/u_sip/a0[59]
-    SLICE_X60Y51         LUT5 (Prop_lut5_I0_O)        0.307    13.039 r  u_core/u_auth/u_sip/v3[59]_i_2/O
-                         net (fo=1, routed)           0.445    13.484    u_core/u_auth/u_sip/v3[59]_i_2_n_0
-    SLICE_X59Y51         LUT4 (Prop_lut4_I3_O)        0.124    13.608 r  u_core/u_auth/u_sip/v3[59]_i_1/O
-                         net (fo=1, routed)           0.000    13.608    u_core/u_auth/u_sip/p_0_in_0[59]
-    SLICE_X59Y51         FDRE                                         r  u_core/u_auth/u_sip/v3_reg[59]/D
+                                                      5.474     5.474    
+    SLICE_X61Y64         FDRE                         0.000     5.474 r  u_core/u_auth/u_sip/v1_reg[1]/C
+    SLICE_X61Y64         FDRE (Prop_fdre_C_Q)         0.456     5.930 r  u_core/u_auth/u_sip/v1_reg[1]/Q
+                         net (fo=4, routed)           0.792     6.722    u_core/u_auth/u_sip/v1[1]
+    SLICE_X58Y60         LUT2 (Prop_lut2_I1_O)        0.124     6.846 r  u_core/u_auth/u_sip/i__carry_i_3__0/O
+                         net (fo=1, routed)           0.000     6.846    u_core/u_auth/u_sip/i__carry_i_3__0_n_0
+    SLICE_X58Y60         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     7.379 r  u_core/u_auth/u_sip/x_inferred__2/i__carry/CO[3]
+                         net (fo=1, routed)           0.000     7.379    u_core/u_auth/u_sip/x_inferred__2/i__carry_n_0
+    SLICE_X58Y61         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.496 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__0/CO[3]
+                         net (fo=1, routed)           0.000     7.496    u_core/u_auth/u_sip/x_inferred__2/i__carry__0_n_0
+    SLICE_X58Y62         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.613 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__1/CO[3]
+                         net (fo=1, routed)           0.000     7.613    u_core/u_auth/u_sip/x_inferred__2/i__carry__1_n_0
+    SLICE_X58Y63         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.730 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__2/CO[3]
+                         net (fo=1, routed)           0.000     7.730    u_core/u_auth/u_sip/x_inferred__2/i__carry__2_n_0
+    SLICE_X58Y64         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.847 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__3/CO[3]
+                         net (fo=1, routed)           0.000     7.847    u_core/u_auth/u_sip/x_inferred__2/i__carry__3_n_0
+    SLICE_X58Y65         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.964 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__4/CO[3]
+                         net (fo=1, routed)           0.000     7.964    u_core/u_auth/u_sip/x_inferred__2/i__carry__4_n_0
+    SLICE_X58Y66         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.081 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__5/CO[3]
+                         net (fo=1, routed)           0.000     8.081    u_core/u_auth/u_sip/x_inferred__2/i__carry__5_n_0
+    SLICE_X58Y67         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.198 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__6/CO[3]
+                         net (fo=1, routed)           0.000     8.198    u_core/u_auth/u_sip/x_inferred__2/i__carry__6_n_0
+    SLICE_X58Y68         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.315 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__7/CO[3]
+                         net (fo=1, routed)           0.000     8.315    u_core/u_auth/u_sip/x_inferred__2/i__carry__7_n_0
+    SLICE_X58Y69         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.432 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__8/CO[3]
+                         net (fo=1, routed)           0.000     8.432    u_core/u_auth/u_sip/x_inferred__2/i__carry__8_n_0
+    SLICE_X58Y70         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.549 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__9/CO[3]
+                         net (fo=1, routed)           0.000     8.549    u_core/u_auth/u_sip/x_inferred__2/i__carry__9_n_0
+    SLICE_X58Y71         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.666 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__10/CO[3]
+                         net (fo=1, routed)           0.000     8.666    u_core/u_auth/u_sip/x_inferred__2/i__carry__10_n_0
+    SLICE_X58Y72         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.323     8.989 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__11/O[1]
+                         net (fo=5, routed)           1.160    10.149    u_core/u_auth/u_sip/x1_out[49]
+    SLICE_X56Y64         LUT3 (Prop_lut3_I0_O)        0.306    10.455 r  u_core/u_auth/u_sip/v01_carry__3_i_3/O
+                         net (fo=1, routed)           0.000    10.455    u_core/u_auth/u_sip/v01_carry__3_i_3_n_0
+    SLICE_X56Y64         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    11.005 r  u_core/u_auth/u_sip/v01_carry__3/CO[3]
+                         net (fo=1, routed)           0.000    11.005    u_core/u_auth/u_sip/v01_carry__3_n_0
+    SLICE_X56Y65         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.119 r  u_core/u_auth/u_sip/v01_carry__4/CO[3]
+                         net (fo=1, routed)           0.000    11.119    u_core/u_auth/u_sip/v01_carry__4_n_0
+    SLICE_X56Y66         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.233 r  u_core/u_auth/u_sip/v01_carry__5/CO[3]
+                         net (fo=1, routed)           0.000    11.233    u_core/u_auth/u_sip/v01_carry__5_n_0
+    SLICE_X56Y67         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.347 r  u_core/u_auth/u_sip/v01_carry__6/CO[3]
+                         net (fo=1, routed)           0.000    11.347    u_core/u_auth/u_sip/v01_carry__6_n_0
+    SLICE_X56Y68         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.461 r  u_core/u_auth/u_sip/v01_carry__7/CO[3]
+                         net (fo=1, routed)           0.000    11.461    u_core/u_auth/u_sip/v01_carry__7_n_0
+    SLICE_X56Y69         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.575 r  u_core/u_auth/u_sip/v01_carry__8/CO[3]
+                         net (fo=1, routed)           0.000    11.575    u_core/u_auth/u_sip/v01_carry__8_n_0
+    SLICE_X56Y70         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.689 r  u_core/u_auth/u_sip/v01_carry__9/CO[3]
+                         net (fo=1, routed)           0.000    11.689    u_core/u_auth/u_sip/v01_carry__9_n_0
+    SLICE_X56Y71         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.803 r  u_core/u_auth/u_sip/v01_carry__10/CO[3]
+                         net (fo=1, routed)           0.000    11.803    u_core/u_auth/u_sip/v01_carry__10_n_0
+    SLICE_X56Y72         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.917 r  u_core/u_auth/u_sip/v01_carry__11/CO[3]
+                         net (fo=1, routed)           0.000    11.917    u_core/u_auth/u_sip/v01_carry__11_n_0
+    SLICE_X56Y73         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    12.031 r  u_core/u_auth/u_sip/v01_carry__12/CO[3]
+                         net (fo=1, routed)           0.000    12.031    u_core/u_auth/u_sip/v01_carry__12_n_0
+    SLICE_X56Y74         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.313    12.344 r  u_core/u_auth/u_sip/v01_carry__13/O[3]
+                         net (fo=2, routed)           0.639    12.983    u_core/u_auth/u_sip/a0[59]
+    SLICE_X63Y69         LUT5 (Prop_lut5_I0_O)        0.306    13.289 r  u_core/u_auth/u_sip/v3[59]_i_2/O
+                         net (fo=1, routed)           0.429    13.718    u_core/u_auth/u_sip/v3[59]_i_2_n_0
+    SLICE_X61Y71         LUT4 (Prop_lut4_I3_O)        0.124    13.842 r  u_core/u_auth/u_sip/v3[59]_i_1/O
+                         net (fo=1, routed)           0.000    13.842    u_core/u_auth/u_sip/p_0_in_0[59]
+    SLICE_X61Y71         FDRE                                         r  u_core/u_auth/u_sip/v3_reg[59]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk rise edge)   10.000    10.000 r  
                          propagated clock network latency
-                                                      5.023    15.023    
-                         clock pessimism              0.280    15.303    
-                         clock uncertainty           -0.035    15.268    
-    SLICE_X59Y51         FDRE (Setup_fdre_C_D)        0.032    15.300    u_core/u_auth/u_sip/v3_reg[59]
+                                                      5.013    15.013    
+                         clock pessimism              0.429    15.442    
+                         clock uncertainty           -0.035    15.407    
+    SLICE_X61Y71         FDRE (Setup_fdre_C_D)        0.032    15.439    u_core/u_auth/u_sip/v3_reg[59]
   -------------------------------------------------------------------
-                         required time                         15.300    
-                         arrival time                         -13.608    
+                         required time                         15.439    
+                         arrival time                         -13.842    
   -------------------------------------------------------------------
-                         slack                                  1.691    
+                         slack                                  1.597    
 
-Slack (MET) :             2.064ns  (required time - arrival time)
-  Source:                 u_core/u_auth/pkt_r_reg[85]/C
+Slack (MET) :             2.099ns  (required time - arrival time)
+  Source:                 u_core/u_auth/u_sip/v1_reg[1]/C
                             (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            u_core/u_window/mask_reg[3]/R
+  Destination:            u_core/u_auth/u_sip/v3_reg[62]/D
                             (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             sys_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (sys_clk rise@10.000ns - sys_clk rise@0.000ns)
-  Data Path Delay:        7.012ns  (logic 2.572ns (36.682%)  route 4.440ns (63.318%))
-  Logic Levels:           10  (CARRY4=5 LUT2=1 LUT3=1 LUT4=1 LUT5=1 LUT6=1)
-  Clock Path Skew:        -0.162ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    5.036ns = ( 15.036 - 10.000 ) 
-    Source Clock Delay      (SCD):    5.477ns
-    Clock Pessimism Removal (CPR):    0.280ns
+  Data Path Delay:        7.823ns  (logic 5.260ns (67.242%)  route 2.563ns (32.758%))
+  Logic Levels:           28  (CARRY4=25 LUT2=1 LUT3=1 LUT6=1)
+  Clock Path Skew:        -0.074ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    5.006ns = ( 15.006 - 10.000 ) 
+    Source Clock Delay      (SCD):    5.474ns
+    Clock Pessimism Removal (CPR):    0.394ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -159,51 +159,107 @@ Slack (MET) :             2.064ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
                          (clock sys_clk rise edge)    0.000     0.000 r  
                          propagated clock network latency
-                                                      5.477     5.477    
-    SLICE_X54Y50         FDRE                         0.000     5.477 r  u_core/u_auth/pkt_r_reg[85]/C
-    SLICE_X54Y50         FDRE (Prop_fdre_C_Q)         0.518     5.995 r  u_core/u_auth/pkt_r_reg[85]/Q
-                         net (fo=10, routed)          0.804     6.799    u_core/u_window/seq[5]
-    SLICE_X52Y46         LUT2 (Prop_lut2_I0_O)        0.124     6.923 r  u_core/u_window/mask[2]_i_7/O
-                         net (fo=1, routed)           0.000     6.923    u_core/u_window/mask[2]_i_7_n_0
-    SLICE_X52Y46         CARRY4 (Prop_carry4_S[1]_CO[3])
-                                                      0.550     7.473 r  u_core/u_window/mask_reg[2]_i_4/CO[3]
-                         net (fo=1, routed)           0.000     7.473    u_core/u_window/mask_reg[2]_i_4_n_0
-    SLICE_X52Y47         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.587 r  u_core/u_window/mask_reg[63]_i_32/CO[3]
-                         net (fo=1, routed)           0.000     7.587    u_core/u_window/mask_reg[63]_i_32_n_0
-    SLICE_X52Y48         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.701 r  u_core/u_window/mask_reg[63]_i_39/CO[3]
-                         net (fo=1, routed)           0.000     7.701    u_core/u_window/mask_reg[63]_i_39_n_0
-    SLICE_X52Y49         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.815 r  u_core/u_window/mask_reg[63]_i_36/CO[3]
-                         net (fo=1, routed)           0.001     7.816    u_core/u_window/mask_reg[63]_i_36_n_0
-    SLICE_X52Y50         CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.334     8.150 r  u_core/u_window/mask_reg[63]_i_35/O[1]
-                         net (fo=1, routed)           0.585     8.735    u_core/u_window/advance1_out[21]
-    SLICE_X50Y49         LUT4 (Prop_lut4_I2_O)        0.303     9.038 r  u_core/u_window/mask[63]_i_34/O
-                         net (fo=1, routed)           0.309     9.347    u_core/u_window/mask[63]_i_34_n_0
-    SLICE_X50Y47         LUT5 (Prop_lut5_I4_O)        0.124     9.471 r  u_core/u_window/mask[63]_i_11/O
-                         net (fo=1, routed)           1.026    10.497    u_core/u_window/mask[63]_i_11_n_0
-    SLICE_X56Y47         LUT6 (Prop_lut6_I3_O)        0.124    10.621 r  u_core/u_window/mask[63]_i_4/O
-                         net (fo=2, routed)           0.608    11.229    u_core/u_window/mask[63]_i_4_n_0
-    SLICE_X55Y46         LUT3 (Prop_lut3_I2_O)        0.153    11.382 r  u_core/u_window/mask[63]_i_1/O
-                         net (fo=63, routed)          1.107    12.489    u_core/u_window/mask[63]_i_1_n_0
-    SLICE_X66Y41         FDRE                                         r  u_core/u_window/mask_reg[3]/R
+                                                      5.474     5.474    
+    SLICE_X61Y64         FDRE                         0.000     5.474 r  u_core/u_auth/u_sip/v1_reg[1]/C
+    SLICE_X61Y64         FDRE (Prop_fdre_C_Q)         0.456     5.930 r  u_core/u_auth/u_sip/v1_reg[1]/Q
+                         net (fo=4, routed)           0.792     6.722    u_core/u_auth/u_sip/v1[1]
+    SLICE_X58Y60         LUT2 (Prop_lut2_I1_O)        0.124     6.846 r  u_core/u_auth/u_sip/i__carry_i_3__0/O
+                         net (fo=1, routed)           0.000     6.846    u_core/u_auth/u_sip/i__carry_i_3__0_n_0
+    SLICE_X58Y60         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     7.379 r  u_core/u_auth/u_sip/x_inferred__2/i__carry/CO[3]
+                         net (fo=1, routed)           0.000     7.379    u_core/u_auth/u_sip/x_inferred__2/i__carry_n_0
+    SLICE_X58Y61         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.496 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__0/CO[3]
+                         net (fo=1, routed)           0.000     7.496    u_core/u_auth/u_sip/x_inferred__2/i__carry__0_n_0
+    SLICE_X58Y62         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.613 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__1/CO[3]
+                         net (fo=1, routed)           0.000     7.613    u_core/u_auth/u_sip/x_inferred__2/i__carry__1_n_0
+    SLICE_X58Y63         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.730 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__2/CO[3]
+                         net (fo=1, routed)           0.000     7.730    u_core/u_auth/u_sip/x_inferred__2/i__carry__2_n_0
+    SLICE_X58Y64         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.847 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__3/CO[3]
+                         net (fo=1, routed)           0.000     7.847    u_core/u_auth/u_sip/x_inferred__2/i__carry__3_n_0
+    SLICE_X58Y65         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.964 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__4/CO[3]
+                         net (fo=1, routed)           0.000     7.964    u_core/u_auth/u_sip/x_inferred__2/i__carry__4_n_0
+    SLICE_X58Y66         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.081 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__5/CO[3]
+                         net (fo=1, routed)           0.000     8.081    u_core/u_auth/u_sip/x_inferred__2/i__carry__5_n_0
+    SLICE_X58Y67         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.198 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__6/CO[3]
+                         net (fo=1, routed)           0.000     8.198    u_core/u_auth/u_sip/x_inferred__2/i__carry__6_n_0
+    SLICE_X58Y68         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.315 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__7/CO[3]
+                         net (fo=1, routed)           0.000     8.315    u_core/u_auth/u_sip/x_inferred__2/i__carry__7_n_0
+    SLICE_X58Y69         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.432 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__8/CO[3]
+                         net (fo=1, routed)           0.000     8.432    u_core/u_auth/u_sip/x_inferred__2/i__carry__8_n_0
+    SLICE_X58Y70         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.549 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__9/CO[3]
+                         net (fo=1, routed)           0.000     8.549    u_core/u_auth/u_sip/x_inferred__2/i__carry__9_n_0
+    SLICE_X58Y71         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.666 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__10/CO[3]
+                         net (fo=1, routed)           0.000     8.666    u_core/u_auth/u_sip/x_inferred__2/i__carry__10_n_0
+    SLICE_X58Y72         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.323     8.989 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__11/O[1]
+                         net (fo=5, routed)           1.160    10.149    u_core/u_auth/u_sip/x1_out[49]
+    SLICE_X56Y64         LUT3 (Prop_lut3_I0_O)        0.306    10.455 r  u_core/u_auth/u_sip/v01_carry__3_i_3/O
+                         net (fo=1, routed)           0.000    10.455    u_core/u_auth/u_sip/v01_carry__3_i_3_n_0
+    SLICE_X56Y64         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    11.005 r  u_core/u_auth/u_sip/v01_carry__3/CO[3]
+                         net (fo=1, routed)           0.000    11.005    u_core/u_auth/u_sip/v01_carry__3_n_0
+    SLICE_X56Y65         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.119 r  u_core/u_auth/u_sip/v01_carry__4/CO[3]
+                         net (fo=1, routed)           0.000    11.119    u_core/u_auth/u_sip/v01_carry__4_n_0
+    SLICE_X56Y66         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.233 r  u_core/u_auth/u_sip/v01_carry__5/CO[3]
+                         net (fo=1, routed)           0.000    11.233    u_core/u_auth/u_sip/v01_carry__5_n_0
+    SLICE_X56Y67         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.347 r  u_core/u_auth/u_sip/v01_carry__6/CO[3]
+                         net (fo=1, routed)           0.000    11.347    u_core/u_auth/u_sip/v01_carry__6_n_0
+    SLICE_X56Y68         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.461 r  u_core/u_auth/u_sip/v01_carry__7/CO[3]
+                         net (fo=1, routed)           0.000    11.461    u_core/u_auth/u_sip/v01_carry__7_n_0
+    SLICE_X56Y69         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.575 r  u_core/u_auth/u_sip/v01_carry__8/CO[3]
+                         net (fo=1, routed)           0.000    11.575    u_core/u_auth/u_sip/v01_carry__8_n_0
+    SLICE_X56Y70         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.689 r  u_core/u_auth/u_sip/v01_carry__9/CO[3]
+                         net (fo=1, routed)           0.000    11.689    u_core/u_auth/u_sip/v01_carry__9_n_0
+    SLICE_X56Y71         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.803 r  u_core/u_auth/u_sip/v01_carry__10/CO[3]
+                         net (fo=1, routed)           0.000    11.803    u_core/u_auth/u_sip/v01_carry__10_n_0
+    SLICE_X56Y72         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.917 r  u_core/u_auth/u_sip/v01_carry__11/CO[3]
+                         net (fo=1, routed)           0.000    11.917    u_core/u_auth/u_sip/v01_carry__11_n_0
+    SLICE_X56Y73         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    12.031 r  u_core/u_auth/u_sip/v01_carry__12/CO[3]
+                         net (fo=1, routed)           0.000    12.031    u_core/u_auth/u_sip/v01_carry__12_n_0
+    SLICE_X56Y74         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    12.145 r  u_core/u_auth/u_sip/v01_carry__13/CO[3]
+                         net (fo=1, routed)           0.009    12.154    u_core/u_auth/u_sip/v01_carry__13_n_0
+    SLICE_X56Y75         CARRY4 (Prop_carry4_CI_O[2])
+                                                      0.239    12.393 r  u_core/u_auth/u_sip/v01_carry__14/O[2]
+                         net (fo=2, routed)           0.602    12.995    u_core/u_auth/u_sip/a0[62]
+    SLICE_X55Y73         LUT6 (Prop_lut6_I4_O)        0.302    13.297 r  u_core/u_auth/u_sip/v3[62]_i_1/O
+                         net (fo=1, routed)           0.000    13.297    u_core/u_auth/u_sip/p_0_in_0[62]
+    SLICE_X55Y73         FDRE                                         r  u_core/u_auth/u_sip/v3_reg[62]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk rise edge)   10.000    10.000 r  
                          propagated clock network latency
-                                                      5.036    15.036    
-                         clock pessimism              0.280    15.316    
-                         clock uncertainty           -0.035    15.280    
-    SLICE_X66Y41         FDRE (Setup_fdre_C_R)       -0.727    14.553    u_core/u_window/mask_reg[3]
+                                                      5.006    15.006    
+                         clock pessimism              0.394    15.400    
+                         clock uncertainty           -0.035    15.365    
+    SLICE_X55Y73         FDRE (Setup_fdre_C_D)        0.031    15.396    u_core/u_auth/u_sip/v3_reg[62]
   -------------------------------------------------------------------
-                         required time                         14.553    
-                         arrival time                         -12.489    
+                         required time                         15.396    
+                         arrival time                         -13.297    
   -------------------------------------------------------------------
-                         slack                                  2.064    
+                         slack                                  2.099    
 
-Slack (MET) :             2.073ns  (required time - arrival time)
+Slack (MET) :             2.107ns  (required time - arrival time)
   Source:                 u_core/u_auth/u_sip/v1_reg[1]/C
                             (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
   Destination:            u_core/u_auth/u_sip/v3_reg[61]/D
@@ -211,12 +267,12 @@ Slack (MET) :             2.073ns  (required time - arrival time)
   Path Group:             sys_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (sys_clk rise@10.000ns - sys_clk rise@0.000ns)
-  Data Path Delay:        7.785ns  (logic 5.359ns (68.839%)  route 2.426ns (31.161%))
+  Data Path Delay:        7.814ns  (logic 5.356ns (68.541%)  route 2.458ns (31.459%))
   Logic Levels:           28  (CARRY4=25 LUT2=1 LUT3=1 LUT6=1)
-  Clock Path Skew:        -0.186ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    5.026ns = ( 15.026 - 10.000 ) 
-    Source Clock Delay      (SCD):    5.492ns
-    Clock Pessimism Removal (CPR):    0.280ns
+  Clock Path Skew:        -0.074ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    5.006ns = ( 15.006 - 10.000 ) 
+    Source Clock Delay      (SCD):    5.474ns
+    Clock Pessimism Removal (CPR):    0.394ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -227,120 +283,120 @@ Slack (MET) :             2.073ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
                          (clock sys_clk rise edge)    0.000     0.000 r  
                          propagated clock network latency
-                                                      5.492     5.492    
-    SLICE_X65Y49         FDRE                         0.000     5.492 r  u_core/u_auth/u_sip/v1_reg[1]/C
-    SLICE_X65Y49         FDRE (Prop_fdre_C_Q)         0.456     5.948 r  u_core/u_auth/u_sip/v1_reg[1]/Q
-                         net (fo=4, routed)           0.756     6.704    u_core/u_auth/u_sip/v1[1]
-    SLICE_X64Y45         LUT2 (Prop_lut2_I1_O)        0.124     6.828 r  u_core/u_auth/u_sip/i__carry_i_3__0/O
-                         net (fo=1, routed)           0.000     6.828    u_core/u_auth/u_sip/i__carry_i_3__0_n_0
-    SLICE_X64Y45         CARRY4 (Prop_carry4_S[1]_CO[3])
-                                                      0.550     7.378 r  u_core/u_auth/u_sip/x_inferred__2/i__carry/CO[3]
-                         net (fo=1, routed)           0.000     7.378    u_core/u_auth/u_sip/x_inferred__2/i__carry_n_0
-    SLICE_X64Y46         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.492 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__0/CO[3]
-                         net (fo=1, routed)           0.000     7.492    u_core/u_auth/u_sip/x_inferred__2/i__carry__0_n_0
-    SLICE_X64Y47         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.606 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__1/CO[3]
-                         net (fo=1, routed)           0.000     7.606    u_core/u_auth/u_sip/x_inferred__2/i__carry__1_n_0
-    SLICE_X64Y48         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.720 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__2/CO[3]
-                         net (fo=1, routed)           0.000     7.720    u_core/u_auth/u_sip/x_inferred__2/i__carry__2_n_0
-    SLICE_X64Y49         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.834 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__3/CO[3]
-                         net (fo=1, routed)           0.001     7.835    u_core/u_auth/u_sip/x_inferred__2/i__carry__3_n_0
-    SLICE_X64Y50         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.949 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__4/CO[3]
-                         net (fo=1, routed)           0.000     7.949    u_core/u_auth/u_sip/x_inferred__2/i__carry__4_n_0
-    SLICE_X64Y51         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     8.063 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__5/CO[3]
-                         net (fo=1, routed)           0.000     8.063    u_core/u_auth/u_sip/x_inferred__2/i__carry__5_n_0
-    SLICE_X64Y52         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     8.177 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__6/CO[3]
-                         net (fo=1, routed)           0.000     8.177    u_core/u_auth/u_sip/x_inferred__2/i__carry__6_n_0
-    SLICE_X64Y53         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     8.291 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__7/CO[3]
-                         net (fo=1, routed)           0.000     8.291    u_core/u_auth/u_sip/x_inferred__2/i__carry__7_n_0
-    SLICE_X64Y54         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     8.405 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__8/CO[3]
-                         net (fo=1, routed)           0.000     8.405    u_core/u_auth/u_sip/x_inferred__2/i__carry__8_n_0
-    SLICE_X64Y55         CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.334     8.739 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__9/O[1]
-                         net (fo=5, routed)           1.026     9.765    u_core/u_auth/u_sip/x1_out[41]
-    SLICE_X62Y46         LUT3 (Prop_lut3_I0_O)        0.303    10.068 r  u_core/u_auth/u_sip/v01_carry__1_i_3/O
-                         net (fo=1, routed)           0.000    10.068    u_core/u_auth/u_sip/v01_carry__1_i_3_n_0
-    SLICE_X62Y46         CARRY4 (Prop_carry4_S[1]_CO[3])
-                                                      0.533    10.601 r  u_core/u_auth/u_sip/v01_carry__1/CO[3]
-                         net (fo=1, routed)           0.000    10.601    u_core/u_auth/u_sip/v01_carry__1_n_0
-    SLICE_X62Y47         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    10.718 r  u_core/u_auth/u_sip/v01_carry__2/CO[3]
-                         net (fo=1, routed)           0.000    10.718    u_core/u_auth/u_sip/v01_carry__2_n_0
-    SLICE_X62Y48         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    10.835 r  u_core/u_auth/u_sip/v01_carry__3/CO[3]
-                         net (fo=1, routed)           0.000    10.835    u_core/u_auth/u_sip/v01_carry__3_n_0
-    SLICE_X62Y49         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    10.952 r  u_core/u_auth/u_sip/v01_carry__4/CO[3]
-                         net (fo=1, routed)           0.001    10.952    u_core/u_auth/u_sip/v01_carry__4_n_0
-    SLICE_X62Y50         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    11.069 r  u_core/u_auth/u_sip/v01_carry__5/CO[3]
-                         net (fo=1, routed)           0.000    11.069    u_core/u_auth/u_sip/v01_carry__5_n_0
-    SLICE_X62Y51         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    11.186 r  u_core/u_auth/u_sip/v01_carry__6/CO[3]
-                         net (fo=1, routed)           0.000    11.186    u_core/u_auth/u_sip/v01_carry__6_n_0
-    SLICE_X62Y52         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    11.303 r  u_core/u_auth/u_sip/v01_carry__7/CO[3]
-                         net (fo=1, routed)           0.000    11.303    u_core/u_auth/u_sip/v01_carry__7_n_0
-    SLICE_X62Y53         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    11.420 r  u_core/u_auth/u_sip/v01_carry__8/CO[3]
-                         net (fo=1, routed)           0.000    11.420    u_core/u_auth/u_sip/v01_carry__8_n_0
-    SLICE_X62Y54         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    11.537 r  u_core/u_auth/u_sip/v01_carry__9/CO[3]
-                         net (fo=1, routed)           0.000    11.537    u_core/u_auth/u_sip/v01_carry__9_n_0
-    SLICE_X62Y55         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    11.654 r  u_core/u_auth/u_sip/v01_carry__10/CO[3]
-                         net (fo=1, routed)           0.000    11.654    u_core/u_auth/u_sip/v01_carry__10_n_0
-    SLICE_X62Y56         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    11.771 r  u_core/u_auth/u_sip/v01_carry__11/CO[3]
-                         net (fo=1, routed)           0.000    11.771    u_core/u_auth/u_sip/v01_carry__11_n_0
-    SLICE_X62Y57         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    11.888 r  u_core/u_auth/u_sip/v01_carry__12/CO[3]
-                         net (fo=1, routed)           0.000    11.888    u_core/u_auth/u_sip/v01_carry__12_n_0
-    SLICE_X62Y58         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    12.005 r  u_core/u_auth/u_sip/v01_carry__13/CO[3]
-                         net (fo=1, routed)           0.000    12.005    u_core/u_auth/u_sip/v01_carry__13_n_0
-    SLICE_X62Y59         CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.323    12.328 r  u_core/u_auth/u_sip/v01_carry__14/O[1]
-                         net (fo=2, routed)           0.643    12.971    u_core/u_auth/u_sip/a0[61]
-    SLICE_X66Y56         LUT6 (Prop_lut6_I4_O)        0.306    13.277 r  u_core/u_auth/u_sip/v3[61]_i_1/O
-                         net (fo=1, routed)           0.000    13.277    u_core/u_auth/u_sip/p_0_in_0[61]
-    SLICE_X66Y56         FDRE                                         r  u_core/u_auth/u_sip/v3_reg[61]/D
+                                                      5.474     5.474    
+    SLICE_X61Y64         FDRE                         0.000     5.474 r  u_core/u_auth/u_sip/v1_reg[1]/C
+    SLICE_X61Y64         FDRE (Prop_fdre_C_Q)         0.456     5.930 r  u_core/u_auth/u_sip/v1_reg[1]/Q
+                         net (fo=4, routed)           0.792     6.722    u_core/u_auth/u_sip/v1[1]
+    SLICE_X58Y60         LUT2 (Prop_lut2_I1_O)        0.124     6.846 r  u_core/u_auth/u_sip/i__carry_i_3__0/O
+                         net (fo=1, routed)           0.000     6.846    u_core/u_auth/u_sip/i__carry_i_3__0_n_0
+    SLICE_X58Y60         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     7.379 r  u_core/u_auth/u_sip/x_inferred__2/i__carry/CO[3]
+                         net (fo=1, routed)           0.000     7.379    u_core/u_auth/u_sip/x_inferred__2/i__carry_n_0
+    SLICE_X58Y61         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.496 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__0/CO[3]
+                         net (fo=1, routed)           0.000     7.496    u_core/u_auth/u_sip/x_inferred__2/i__carry__0_n_0
+    SLICE_X58Y62         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.613 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__1/CO[3]
+                         net (fo=1, routed)           0.000     7.613    u_core/u_auth/u_sip/x_inferred__2/i__carry__1_n_0
+    SLICE_X58Y63         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.730 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__2/CO[3]
+                         net (fo=1, routed)           0.000     7.730    u_core/u_auth/u_sip/x_inferred__2/i__carry__2_n_0
+    SLICE_X58Y64         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.847 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__3/CO[3]
+                         net (fo=1, routed)           0.000     7.847    u_core/u_auth/u_sip/x_inferred__2/i__carry__3_n_0
+    SLICE_X58Y65         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.964 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__4/CO[3]
+                         net (fo=1, routed)           0.000     7.964    u_core/u_auth/u_sip/x_inferred__2/i__carry__4_n_0
+    SLICE_X58Y66         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.081 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__5/CO[3]
+                         net (fo=1, routed)           0.000     8.081    u_core/u_auth/u_sip/x_inferred__2/i__carry__5_n_0
+    SLICE_X58Y67         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.198 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__6/CO[3]
+                         net (fo=1, routed)           0.000     8.198    u_core/u_auth/u_sip/x_inferred__2/i__carry__6_n_0
+    SLICE_X58Y68         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.315 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__7/CO[3]
+                         net (fo=1, routed)           0.000     8.315    u_core/u_auth/u_sip/x_inferred__2/i__carry__7_n_0
+    SLICE_X58Y69         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.432 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__8/CO[3]
+                         net (fo=1, routed)           0.000     8.432    u_core/u_auth/u_sip/x_inferred__2/i__carry__8_n_0
+    SLICE_X58Y70         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.549 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__9/CO[3]
+                         net (fo=1, routed)           0.000     8.549    u_core/u_auth/u_sip/x_inferred__2/i__carry__9_n_0
+    SLICE_X58Y71         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.666 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__10/CO[3]
+                         net (fo=1, routed)           0.000     8.666    u_core/u_auth/u_sip/x_inferred__2/i__carry__10_n_0
+    SLICE_X58Y72         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.323     8.989 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__11/O[1]
+                         net (fo=5, routed)           1.160    10.149    u_core/u_auth/u_sip/x1_out[49]
+    SLICE_X56Y64         LUT3 (Prop_lut3_I0_O)        0.306    10.455 r  u_core/u_auth/u_sip/v01_carry__3_i_3/O
+                         net (fo=1, routed)           0.000    10.455    u_core/u_auth/u_sip/v01_carry__3_i_3_n_0
+    SLICE_X56Y64         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    11.005 r  u_core/u_auth/u_sip/v01_carry__3/CO[3]
+                         net (fo=1, routed)           0.000    11.005    u_core/u_auth/u_sip/v01_carry__3_n_0
+    SLICE_X56Y65         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.119 r  u_core/u_auth/u_sip/v01_carry__4/CO[3]
+                         net (fo=1, routed)           0.000    11.119    u_core/u_auth/u_sip/v01_carry__4_n_0
+    SLICE_X56Y66         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.233 r  u_core/u_auth/u_sip/v01_carry__5/CO[3]
+                         net (fo=1, routed)           0.000    11.233    u_core/u_auth/u_sip/v01_carry__5_n_0
+    SLICE_X56Y67         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.347 r  u_core/u_auth/u_sip/v01_carry__6/CO[3]
+                         net (fo=1, routed)           0.000    11.347    u_core/u_auth/u_sip/v01_carry__6_n_0
+    SLICE_X56Y68         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.461 r  u_core/u_auth/u_sip/v01_carry__7/CO[3]
+                         net (fo=1, routed)           0.000    11.461    u_core/u_auth/u_sip/v01_carry__7_n_0
+    SLICE_X56Y69         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.575 r  u_core/u_auth/u_sip/v01_carry__8/CO[3]
+                         net (fo=1, routed)           0.000    11.575    u_core/u_auth/u_sip/v01_carry__8_n_0
+    SLICE_X56Y70         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.689 r  u_core/u_auth/u_sip/v01_carry__9/CO[3]
+                         net (fo=1, routed)           0.000    11.689    u_core/u_auth/u_sip/v01_carry__9_n_0
+    SLICE_X56Y71         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.803 r  u_core/u_auth/u_sip/v01_carry__10/CO[3]
+                         net (fo=1, routed)           0.000    11.803    u_core/u_auth/u_sip/v01_carry__10_n_0
+    SLICE_X56Y72         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.917 r  u_core/u_auth/u_sip/v01_carry__11/CO[3]
+                         net (fo=1, routed)           0.000    11.917    u_core/u_auth/u_sip/v01_carry__11_n_0
+    SLICE_X56Y73         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    12.031 r  u_core/u_auth/u_sip/v01_carry__12/CO[3]
+                         net (fo=1, routed)           0.000    12.031    u_core/u_auth/u_sip/v01_carry__12_n_0
+    SLICE_X56Y74         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    12.145 r  u_core/u_auth/u_sip/v01_carry__13/CO[3]
+                         net (fo=1, routed)           0.009    12.154    u_core/u_auth/u_sip/v01_carry__13_n_0
+    SLICE_X56Y75         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    12.488 r  u_core/u_auth/u_sip/v01_carry__14/O[1]
+                         net (fo=2, routed)           0.498    12.986    u_core/u_auth/u_sip/a0[61]
+    SLICE_X55Y73         LUT6 (Prop_lut6_I4_O)        0.303    13.289 r  u_core/u_auth/u_sip/v3[61]_i_1/O
+                         net (fo=1, routed)           0.000    13.289    u_core/u_auth/u_sip/p_0_in_0[61]
+    SLICE_X55Y73         FDRE                                         r  u_core/u_auth/u_sip/v3_reg[61]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk rise edge)   10.000    10.000 r  
                          propagated clock network latency
-                                                      5.026    15.026    
-                         clock pessimism              0.280    15.306    
-                         clock uncertainty           -0.035    15.271    
-    SLICE_X66Y56         FDRE (Setup_fdre_C_D)        0.079    15.350    u_core/u_auth/u_sip/v3_reg[61]
+                                                      5.006    15.006    
+                         clock pessimism              0.394    15.400    
+                         clock uncertainty           -0.035    15.365    
+    SLICE_X55Y73         FDRE (Setup_fdre_C_D)        0.031    15.396    u_core/u_auth/u_sip/v3_reg[61]
   -------------------------------------------------------------------
-                         required time                         15.350    
-                         arrival time                         -13.277    
+                         required time                         15.396    
+                         arrival time                         -13.289    
   -------------------------------------------------------------------
-                         slack                                  2.073    
+                         slack                                  2.107    
 
-Slack (MET) :             2.073ns  (required time - arrival time)
-  Source:                 u_core/u_auth/pkt_r_reg[85]/C
+Slack (MET) :             2.116ns  (required time - arrival time)
+  Source:                 u_core/u_auth/u_sip/v1_reg[1]/C
                             (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            u_core/u_window/mask_reg[16]/R
+  Destination:            u_core/u_auth/u_sip/v3_reg[63]/D
                             (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             sys_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (sys_clk rise@10.000ns - sys_clk rise@0.000ns)
-  Data Path Delay:        7.000ns  (logic 2.572ns (36.743%)  route 4.428ns (63.257%))
-  Logic Levels:           10  (CARRY4=5 LUT2=1 LUT3=1 LUT4=1 LUT5=1 LUT6=1)
-  Clock Path Skew:        -0.165ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    5.033ns = ( 15.033 - 10.000 ) 
-    Source Clock Delay      (SCD):    5.477ns
-    Clock Pessimism Removal (CPR):    0.280ns
+  Data Path Delay:        7.807ns  (logic 5.338ns (68.373%)  route 2.469ns (31.627%))
+  Logic Levels:           28  (CARRY4=25 LUT2=1 LUT3=1 LUT6=1)
+  Clock Path Skew:        -0.074ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    5.006ns = ( 15.006 - 10.000 ) 
+    Source Clock Delay      (SCD):    5.474ns
+    Clock Pessimism Removal (CPR):    0.394ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -351,64 +407,120 @@ Slack (MET) :             2.073ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
                          (clock sys_clk rise edge)    0.000     0.000 r  
                          propagated clock network latency
-                                                      5.477     5.477    
-    SLICE_X54Y50         FDRE                         0.000     5.477 r  u_core/u_auth/pkt_r_reg[85]/C
-    SLICE_X54Y50         FDRE (Prop_fdre_C_Q)         0.518     5.995 r  u_core/u_auth/pkt_r_reg[85]/Q
-                         net (fo=10, routed)          0.804     6.799    u_core/u_window/seq[5]
-    SLICE_X52Y46         LUT2 (Prop_lut2_I0_O)        0.124     6.923 r  u_core/u_window/mask[2]_i_7/O
-                         net (fo=1, routed)           0.000     6.923    u_core/u_window/mask[2]_i_7_n_0
-    SLICE_X52Y46         CARRY4 (Prop_carry4_S[1]_CO[3])
-                                                      0.550     7.473 r  u_core/u_window/mask_reg[2]_i_4/CO[3]
-                         net (fo=1, routed)           0.000     7.473    u_core/u_window/mask_reg[2]_i_4_n_0
-    SLICE_X52Y47         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.587 r  u_core/u_window/mask_reg[63]_i_32/CO[3]
-                         net (fo=1, routed)           0.000     7.587    u_core/u_window/mask_reg[63]_i_32_n_0
-    SLICE_X52Y48         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.701 r  u_core/u_window/mask_reg[63]_i_39/CO[3]
-                         net (fo=1, routed)           0.000     7.701    u_core/u_window/mask_reg[63]_i_39_n_0
-    SLICE_X52Y49         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.815 r  u_core/u_window/mask_reg[63]_i_36/CO[3]
-                         net (fo=1, routed)           0.001     7.816    u_core/u_window/mask_reg[63]_i_36_n_0
-    SLICE_X52Y50         CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.334     8.150 r  u_core/u_window/mask_reg[63]_i_35/O[1]
-                         net (fo=1, routed)           0.585     8.735    u_core/u_window/advance1_out[21]
-    SLICE_X50Y49         LUT4 (Prop_lut4_I2_O)        0.303     9.038 r  u_core/u_window/mask[63]_i_34/O
-                         net (fo=1, routed)           0.309     9.347    u_core/u_window/mask[63]_i_34_n_0
-    SLICE_X50Y47         LUT5 (Prop_lut5_I4_O)        0.124     9.471 r  u_core/u_window/mask[63]_i_11/O
-                         net (fo=1, routed)           1.026    10.497    u_core/u_window/mask[63]_i_11_n_0
-    SLICE_X56Y47         LUT6 (Prop_lut6_I3_O)        0.124    10.621 r  u_core/u_window/mask[63]_i_4/O
-                         net (fo=2, routed)           0.608    11.229    u_core/u_window/mask[63]_i_4_n_0
-    SLICE_X55Y46         LUT3 (Prop_lut3_I2_O)        0.153    11.382 r  u_core/u_window/mask[63]_i_1/O
-                         net (fo=63, routed)          1.096    12.477    u_core/u_window/mask[63]_i_1_n_0
-    SLICE_X62Y38         FDRE                                         r  u_core/u_window/mask_reg[16]/R
+                                                      5.474     5.474    
+    SLICE_X61Y64         FDRE                         0.000     5.474 r  u_core/u_auth/u_sip/v1_reg[1]/C
+    SLICE_X61Y64         FDRE (Prop_fdre_C_Q)         0.456     5.930 r  u_core/u_auth/u_sip/v1_reg[1]/Q
+                         net (fo=4, routed)           0.792     6.722    u_core/u_auth/u_sip/v1[1]
+    SLICE_X58Y60         LUT2 (Prop_lut2_I1_O)        0.124     6.846 r  u_core/u_auth/u_sip/i__carry_i_3__0/O
+                         net (fo=1, routed)           0.000     6.846    u_core/u_auth/u_sip/i__carry_i_3__0_n_0
+    SLICE_X58Y60         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     7.379 r  u_core/u_auth/u_sip/x_inferred__2/i__carry/CO[3]
+                         net (fo=1, routed)           0.000     7.379    u_core/u_auth/u_sip/x_inferred__2/i__carry_n_0
+    SLICE_X58Y61         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.496 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__0/CO[3]
+                         net (fo=1, routed)           0.000     7.496    u_core/u_auth/u_sip/x_inferred__2/i__carry__0_n_0
+    SLICE_X58Y62         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.613 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__1/CO[3]
+                         net (fo=1, routed)           0.000     7.613    u_core/u_auth/u_sip/x_inferred__2/i__carry__1_n_0
+    SLICE_X58Y63         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.730 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__2/CO[3]
+                         net (fo=1, routed)           0.000     7.730    u_core/u_auth/u_sip/x_inferred__2/i__carry__2_n_0
+    SLICE_X58Y64         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.847 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__3/CO[3]
+                         net (fo=1, routed)           0.000     7.847    u_core/u_auth/u_sip/x_inferred__2/i__carry__3_n_0
+    SLICE_X58Y65         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.964 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__4/CO[3]
+                         net (fo=1, routed)           0.000     7.964    u_core/u_auth/u_sip/x_inferred__2/i__carry__4_n_0
+    SLICE_X58Y66         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.081 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__5/CO[3]
+                         net (fo=1, routed)           0.000     8.081    u_core/u_auth/u_sip/x_inferred__2/i__carry__5_n_0
+    SLICE_X58Y67         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.198 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__6/CO[3]
+                         net (fo=1, routed)           0.000     8.198    u_core/u_auth/u_sip/x_inferred__2/i__carry__6_n_0
+    SLICE_X58Y68         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.315 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__7/CO[3]
+                         net (fo=1, routed)           0.000     8.315    u_core/u_auth/u_sip/x_inferred__2/i__carry__7_n_0
+    SLICE_X58Y69         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.432 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__8/CO[3]
+                         net (fo=1, routed)           0.000     8.432    u_core/u_auth/u_sip/x_inferred__2/i__carry__8_n_0
+    SLICE_X58Y70         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.549 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__9/CO[3]
+                         net (fo=1, routed)           0.000     8.549    u_core/u_auth/u_sip/x_inferred__2/i__carry__9_n_0
+    SLICE_X58Y71         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.666 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__10/CO[3]
+                         net (fo=1, routed)           0.000     8.666    u_core/u_auth/u_sip/x_inferred__2/i__carry__10_n_0
+    SLICE_X58Y72         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.323     8.989 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__11/O[1]
+                         net (fo=5, routed)           1.160    10.149    u_core/u_auth/u_sip/x1_out[49]
+    SLICE_X56Y64         LUT3 (Prop_lut3_I0_O)        0.306    10.455 r  u_core/u_auth/u_sip/v01_carry__3_i_3/O
+                         net (fo=1, routed)           0.000    10.455    u_core/u_auth/u_sip/v01_carry__3_i_3_n_0
+    SLICE_X56Y64         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    11.005 r  u_core/u_auth/u_sip/v01_carry__3/CO[3]
+                         net (fo=1, routed)           0.000    11.005    u_core/u_auth/u_sip/v01_carry__3_n_0
+    SLICE_X56Y65         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.119 r  u_core/u_auth/u_sip/v01_carry__4/CO[3]
+                         net (fo=1, routed)           0.000    11.119    u_core/u_auth/u_sip/v01_carry__4_n_0
+    SLICE_X56Y66         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.233 r  u_core/u_auth/u_sip/v01_carry__5/CO[3]
+                         net (fo=1, routed)           0.000    11.233    u_core/u_auth/u_sip/v01_carry__5_n_0
+    SLICE_X56Y67         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.347 r  u_core/u_auth/u_sip/v01_carry__6/CO[3]
+                         net (fo=1, routed)           0.000    11.347    u_core/u_auth/u_sip/v01_carry__6_n_0
+    SLICE_X56Y68         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.461 r  u_core/u_auth/u_sip/v01_carry__7/CO[3]
+                         net (fo=1, routed)           0.000    11.461    u_core/u_auth/u_sip/v01_carry__7_n_0
+    SLICE_X56Y69         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.575 r  u_core/u_auth/u_sip/v01_carry__8/CO[3]
+                         net (fo=1, routed)           0.000    11.575    u_core/u_auth/u_sip/v01_carry__8_n_0
+    SLICE_X56Y70         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.689 r  u_core/u_auth/u_sip/v01_carry__9/CO[3]
+                         net (fo=1, routed)           0.000    11.689    u_core/u_auth/u_sip/v01_carry__9_n_0
+    SLICE_X56Y71         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.803 r  u_core/u_auth/u_sip/v01_carry__10/CO[3]
+                         net (fo=1, routed)           0.000    11.803    u_core/u_auth/u_sip/v01_carry__10_n_0
+    SLICE_X56Y72         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.917 r  u_core/u_auth/u_sip/v01_carry__11/CO[3]
+                         net (fo=1, routed)           0.000    11.917    u_core/u_auth/u_sip/v01_carry__11_n_0
+    SLICE_X56Y73         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    12.031 r  u_core/u_auth/u_sip/v01_carry__12/CO[3]
+                         net (fo=1, routed)           0.000    12.031    u_core/u_auth/u_sip/v01_carry__12_n_0
+    SLICE_X56Y74         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    12.145 r  u_core/u_auth/u_sip/v01_carry__13/CO[3]
+                         net (fo=1, routed)           0.009    12.154    u_core/u_auth/u_sip/v01_carry__13_n_0
+    SLICE_X56Y75         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.313    12.467 r  u_core/u_auth/u_sip/v01_carry__14/O[3]
+                         net (fo=2, routed)           0.509    12.976    u_core/u_auth/u_sip/a0[63]
+    SLICE_X55Y73         LUT6 (Prop_lut6_I3_O)        0.306    13.282 r  u_core/u_auth/u_sip/v3[63]_i_2/O
+                         net (fo=1, routed)           0.000    13.282    u_core/u_auth/u_sip/p_0_in_0[63]
+    SLICE_X55Y73         FDRE                                         r  u_core/u_auth/u_sip/v3_reg[63]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk rise edge)   10.000    10.000 r  
                          propagated clock network latency
-                                                      5.033    15.033    
-                         clock pessimism              0.280    15.313    
-                         clock uncertainty           -0.035    15.277    
-    SLICE_X62Y38         FDRE (Setup_fdre_C_R)       -0.727    14.550    u_core/u_window/mask_reg[16]
+                                                      5.006    15.006    
+                         clock pessimism              0.394    15.400    
+                         clock uncertainty           -0.035    15.365    
+    SLICE_X55Y73         FDRE (Setup_fdre_C_D)        0.032    15.397    u_core/u_auth/u_sip/v3_reg[63]
   -------------------------------------------------------------------
-                         required time                         14.550    
-                         arrival time                         -12.477    
+                         required time                         15.397    
+                         arrival time                         -13.282    
   -------------------------------------------------------------------
-                         slack                                  2.073    
+                         slack                                  2.116    
 
-Slack (MET) :             2.074ns  (required time - arrival time)
-  Source:                 u_core/u_auth/pkt_r_reg[85]/C
+Slack (MET) :             2.116ns  (required time - arrival time)
+  Source:                 u_core/u_auth/u_sip/v1_reg[1]/C
                             (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            u_core/u_window/mask_reg[14]/R
+  Destination:            u_core/u_auth/u_sip/v0_reg[63]/D
                             (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             sys_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (sys_clk rise@10.000ns - sys_clk rise@0.000ns)
-  Data Path Delay:        6.998ns  (logic 2.572ns (36.753%)  route 4.426ns (63.247%))
-  Logic Levels:           10  (CARRY4=5 LUT2=1 LUT3=1 LUT4=1 LUT5=1 LUT6=1)
-  Clock Path Skew:        -0.166ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    5.032ns = ( 15.032 - 10.000 ) 
-    Source Clock Delay      (SCD):    5.477ns
-    Clock Pessimism Removal (CPR):    0.280ns
+  Data Path Delay:        7.802ns  (logic 5.338ns (68.418%)  route 2.464ns (31.582%))
+  Logic Levels:           28  (CARRY4=25 LUT2=1 LUT3=1 LUT6=1)
+  Clock Path Skew:        -0.076ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    5.004ns = ( 15.004 - 10.000 ) 
+    Source Clock Delay      (SCD):    5.474ns
+    Clock Pessimism Removal (CPR):    0.394ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -419,49 +531,105 @@ Slack (MET) :             2.074ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
                          (clock sys_clk rise edge)    0.000     0.000 r  
                          propagated clock network latency
-                                                      5.477     5.477    
-    SLICE_X54Y50         FDRE                         0.000     5.477 r  u_core/u_auth/pkt_r_reg[85]/C
-    SLICE_X54Y50         FDRE (Prop_fdre_C_Q)         0.518     5.995 r  u_core/u_auth/pkt_r_reg[85]/Q
-                         net (fo=10, routed)          0.804     6.799    u_core/u_window/seq[5]
-    SLICE_X52Y46         LUT2 (Prop_lut2_I0_O)        0.124     6.923 r  u_core/u_window/mask[2]_i_7/O
-                         net (fo=1, routed)           0.000     6.923    u_core/u_window/mask[2]_i_7_n_0
-    SLICE_X52Y46         CARRY4 (Prop_carry4_S[1]_CO[3])
-                                                      0.550     7.473 r  u_core/u_window/mask_reg[2]_i_4/CO[3]
-                         net (fo=1, routed)           0.000     7.473    u_core/u_window/mask_reg[2]_i_4_n_0
-    SLICE_X52Y47         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.587 r  u_core/u_window/mask_reg[63]_i_32/CO[3]
-                         net (fo=1, routed)           0.000     7.587    u_core/u_window/mask_reg[63]_i_32_n_0
-    SLICE_X52Y48         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.701 r  u_core/u_window/mask_reg[63]_i_39/CO[3]
-                         net (fo=1, routed)           0.000     7.701    u_core/u_window/mask_reg[63]_i_39_n_0
-    SLICE_X52Y49         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.815 r  u_core/u_window/mask_reg[63]_i_36/CO[3]
-                         net (fo=1, routed)           0.001     7.816    u_core/u_window/mask_reg[63]_i_36_n_0
-    SLICE_X52Y50         CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.334     8.150 r  u_core/u_window/mask_reg[63]_i_35/O[1]
-                         net (fo=1, routed)           0.585     8.735    u_core/u_window/advance1_out[21]
-    SLICE_X50Y49         LUT4 (Prop_lut4_I2_O)        0.303     9.038 r  u_core/u_window/mask[63]_i_34/O
-                         net (fo=1, routed)           0.309     9.347    u_core/u_window/mask[63]_i_34_n_0
-    SLICE_X50Y47         LUT5 (Prop_lut5_I4_O)        0.124     9.471 r  u_core/u_window/mask[63]_i_11/O
-                         net (fo=1, routed)           1.026    10.497    u_core/u_window/mask[63]_i_11_n_0
-    SLICE_X56Y47         LUT6 (Prop_lut6_I3_O)        0.124    10.621 r  u_core/u_window/mask[63]_i_4/O
-                         net (fo=2, routed)           0.608    11.229    u_core/u_window/mask[63]_i_4_n_0
-    SLICE_X55Y46         LUT3 (Prop_lut3_I2_O)        0.153    11.382 r  u_core/u_window/mask[63]_i_1/O
-                         net (fo=63, routed)          1.094    12.476    u_core/u_window/mask[63]_i_1_n_0
-    SLICE_X62Y37         FDRE                                         r  u_core/u_window/mask_reg[14]/R
+                                                      5.474     5.474    
+    SLICE_X61Y64         FDRE                         0.000     5.474 r  u_core/u_auth/u_sip/v1_reg[1]/C
+    SLICE_X61Y64         FDRE (Prop_fdre_C_Q)         0.456     5.930 r  u_core/u_auth/u_sip/v1_reg[1]/Q
+                         net (fo=4, routed)           0.792     6.722    u_core/u_auth/u_sip/v1[1]
+    SLICE_X58Y60         LUT2 (Prop_lut2_I1_O)        0.124     6.846 r  u_core/u_auth/u_sip/i__carry_i_3__0/O
+                         net (fo=1, routed)           0.000     6.846    u_core/u_auth/u_sip/i__carry_i_3__0_n_0
+    SLICE_X58Y60         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     7.379 r  u_core/u_auth/u_sip/x_inferred__2/i__carry/CO[3]
+                         net (fo=1, routed)           0.000     7.379    u_core/u_auth/u_sip/x_inferred__2/i__carry_n_0
+    SLICE_X58Y61         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.496 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__0/CO[3]
+                         net (fo=1, routed)           0.000     7.496    u_core/u_auth/u_sip/x_inferred__2/i__carry__0_n_0
+    SLICE_X58Y62         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.613 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__1/CO[3]
+                         net (fo=1, routed)           0.000     7.613    u_core/u_auth/u_sip/x_inferred__2/i__carry__1_n_0
+    SLICE_X58Y63         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.730 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__2/CO[3]
+                         net (fo=1, routed)           0.000     7.730    u_core/u_auth/u_sip/x_inferred__2/i__carry__2_n_0
+    SLICE_X58Y64         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.847 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__3/CO[3]
+                         net (fo=1, routed)           0.000     7.847    u_core/u_auth/u_sip/x_inferred__2/i__carry__3_n_0
+    SLICE_X58Y65         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.964 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__4/CO[3]
+                         net (fo=1, routed)           0.000     7.964    u_core/u_auth/u_sip/x_inferred__2/i__carry__4_n_0
+    SLICE_X58Y66         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.081 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__5/CO[3]
+                         net (fo=1, routed)           0.000     8.081    u_core/u_auth/u_sip/x_inferred__2/i__carry__5_n_0
+    SLICE_X58Y67         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.198 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__6/CO[3]
+                         net (fo=1, routed)           0.000     8.198    u_core/u_auth/u_sip/x_inferred__2/i__carry__6_n_0
+    SLICE_X58Y68         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.315 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__7/CO[3]
+                         net (fo=1, routed)           0.000     8.315    u_core/u_auth/u_sip/x_inferred__2/i__carry__7_n_0
+    SLICE_X58Y69         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.432 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__8/CO[3]
+                         net (fo=1, routed)           0.000     8.432    u_core/u_auth/u_sip/x_inferred__2/i__carry__8_n_0
+    SLICE_X58Y70         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.549 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__9/CO[3]
+                         net (fo=1, routed)           0.000     8.549    u_core/u_auth/u_sip/x_inferred__2/i__carry__9_n_0
+    SLICE_X58Y71         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     8.666 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__10/CO[3]
+                         net (fo=1, routed)           0.000     8.666    u_core/u_auth/u_sip/x_inferred__2/i__carry__10_n_0
+    SLICE_X58Y72         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.323     8.989 r  u_core/u_auth/u_sip/x_inferred__2/i__carry__11/O[1]
+                         net (fo=5, routed)           1.160    10.149    u_core/u_auth/u_sip/x1_out[49]
+    SLICE_X56Y64         LUT3 (Prop_lut3_I0_O)        0.306    10.455 r  u_core/u_auth/u_sip/v01_carry__3_i_3/O
+                         net (fo=1, routed)           0.000    10.455    u_core/u_auth/u_sip/v01_carry__3_i_3_n_0
+    SLICE_X56Y64         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    11.005 r  u_core/u_auth/u_sip/v01_carry__3/CO[3]
+                         net (fo=1, routed)           0.000    11.005    u_core/u_auth/u_sip/v01_carry__3_n_0
+    SLICE_X56Y65         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.119 r  u_core/u_auth/u_sip/v01_carry__4/CO[3]
+                         net (fo=1, routed)           0.000    11.119    u_core/u_auth/u_sip/v01_carry__4_n_0
+    SLICE_X56Y66         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.233 r  u_core/u_auth/u_sip/v01_carry__5/CO[3]
+                         net (fo=1, routed)           0.000    11.233    u_core/u_auth/u_sip/v01_carry__5_n_0
+    SLICE_X56Y67         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.347 r  u_core/u_auth/u_sip/v01_carry__6/CO[3]
+                         net (fo=1, routed)           0.000    11.347    u_core/u_auth/u_sip/v01_carry__6_n_0
+    SLICE_X56Y68         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.461 r  u_core/u_auth/u_sip/v01_carry__7/CO[3]
+                         net (fo=1, routed)           0.000    11.461    u_core/u_auth/u_sip/v01_carry__7_n_0
+    SLICE_X56Y69         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.575 r  u_core/u_auth/u_sip/v01_carry__8/CO[3]
+                         net (fo=1, routed)           0.000    11.575    u_core/u_auth/u_sip/v01_carry__8_n_0
+    SLICE_X56Y70         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.689 r  u_core/u_auth/u_sip/v01_carry__9/CO[3]
+                         net (fo=1, routed)           0.000    11.689    u_core/u_auth/u_sip/v01_carry__9_n_0
+    SLICE_X56Y71         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.803 r  u_core/u_auth/u_sip/v01_carry__10/CO[3]
+                         net (fo=1, routed)           0.000    11.803    u_core/u_auth/u_sip/v01_carry__10_n_0
+    SLICE_X56Y72         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.917 r  u_core/u_auth/u_sip/v01_carry__11/CO[3]
+                         net (fo=1, routed)           0.000    11.917    u_core/u_auth/u_sip/v01_carry__11_n_0
+    SLICE_X56Y73         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    12.031 r  u_core/u_auth/u_sip/v01_carry__12/CO[3]
+                         net (fo=1, routed)           0.000    12.031    u_core/u_auth/u_sip/v01_carry__12_n_0
+    SLICE_X56Y74         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    12.145 r  u_core/u_auth/u_sip/v01_carry__13/CO[3]
+                         net (fo=1, routed)           0.009    12.154    u_core/u_auth/u_sip/v01_carry__13_n_0
+    SLICE_X56Y75         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.313    12.467 r  u_core/u_auth/u_sip/v01_carry__14/O[3]
+                         net (fo=2, routed)           0.504    12.970    u_core/u_auth/u_sip/a0[63]
+    SLICE_X55Y74         LUT6 (Prop_lut6_I5_O)        0.306    13.276 r  u_core/u_auth/u_sip/v0[63]_i_1/O
+                         net (fo=1, routed)           0.000    13.276    u_core/u_auth/u_sip/v0[63]
+    SLICE_X55Y74         FDRE                                         r  u_core/u_auth/u_sip/v0_reg[63]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk rise edge)   10.000    10.000 r  
                          propagated clock network latency
-                                                      5.032    15.032    
-                         clock pessimism              0.280    15.312    
-                         clock uncertainty           -0.035    15.276    
-    SLICE_X62Y37         FDRE (Setup_fdre_C_R)       -0.727    14.549    u_core/u_window/mask_reg[14]
+                                                      5.004    15.004    
+                         clock pessimism              0.394    15.398    
+                         clock uncertainty           -0.035    15.363    
+    SLICE_X55Y74         FDRE (Setup_fdre_C_D)        0.029    15.392    u_core/u_auth/u_sip/v0_reg[63]
   -------------------------------------------------------------------
-                         required time                         14.549    
-                         arrival time                         -12.476    
+                         required time                         15.392    
+                         arrival time                         -13.276    
   -------------------------------------------------------------------
-                         slack                                  2.074    
+                         slack                                  2.116    
 
 
 
