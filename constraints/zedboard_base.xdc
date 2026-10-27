@@ -19,6 +19,11 @@ set_property -dict { PACKAGE_PIN U14 IOSTANDARD LVCMOS33 } [get_ports {led[7]}]
 ## Centre push button BTNC (bank 34, powered by VADJ, 2.5 V in the board file)
 set_property -dict { PACKAGE_PIN P16 IOSTANDARD LVCMOS25 } [get_ports btn_c]
 
+## Slide switch SW0 selects the replay policy: down = strict counter, up = sliding window.
+## Bank 35 is powered by VADJ, 2.5 V in the board file. A two-flip-flop synchronizer follows.
+set_property -dict { PACKAGE_PIN F22 IOSTANDARD LVCMOS25 } [get_ports sw_policy]
+set_false_path -from [get_ports sw_policy]
+
 ## On-board OLED (SSD1306, wired like a PmodOLED). VBAT and VDD switch power on when low.
 set_property -dict { PACKAGE_PIN AA12 IOSTANDARD LVCMOS33 } [get_ports oled_sdin]
 set_property -dict { PACKAGE_PIN AB12 IOSTANDARD LVCMOS33 } [get_ports oled_sclk]

@@ -26,7 +26,7 @@ Trade-off: the ROM is generated code. Regenerate it with the script rather than 
 ## LED display replays events slowly
 
 Date: 2026-10-27
-Context: a verdict takes 12 clocks, so LEDs that follow the datapath directly change too fast to see.
+Context: a verdict takes 13 clocks, so LEDs that follow the datapath directly change too fast to see.
 Decision: `rtl/led_display.v` latches each event and plays it back in 125 ms steps. A new event replaces the current display and restarts the step timer.
 Trade-off: when packets arrive faster than the animation, the LEDs show only the latest one. Telemetry remains the complete record.
 
@@ -57,7 +57,7 @@ Alternatives: a Vitis platform and board support package. That adds a large gene
 Date: 2026-10-25
 Context: the Pmod labels JA2 as RXD and JA3 as TXD. Digilent names these from the Pmod's own FTDI chip.
 Decision: the FPGA transmits on JA2 (AA11) and receives on JA3 (Y10).
-Alternatives: none. A swap gives silence in both directions. If the board is silent, swapping these two lines in `constraints/zedboard.xdc` is the first check.
+Alternatives: none. A swap gives silence in both directions. If the board is silent, swapping these two lines in `constraints/pmod_uart.xdc` is the first check.
 
 ## Iterative SipHash core, one SipRound per clock
 
@@ -74,12 +74,13 @@ Context: the RTL needs a fixed key, and its output must be checked against an in
 Decision: key bytes are `00 01 .. 0f`. Official vector 8 (message `00 .. 07`) is the first case in `sim/vectors/siphash.hex`.
 Trade-off: the key is public. That is acceptable for a lab demonstration, and the specification excludes key management.
 
-## Reset frame A5 C3
+## Signed, epoch-checked reset (replaces the unsigned A5 C3 reset)
 
-Date: 2026-10-25
-Context: the hardware demo needs many fresh test sessions without someone pressing a button each time.
-Decision: the parser treats `A5 C3` as a session reset, in addition to the BTNC button.
-Trade-off: anyone on the serial link can clear replay state, which reopens every old packet. This is a lab convenience only and must be removed in any real use.
+Date: 2026-10-27
+Context: the first design reset both engines on the two bytes `A5 C3`, with no tag. A review showed the attack this allows: send packet 1, send `A5 C3`, send packet 1 again, and both engines accept it twice. The reset's log line could also be dropped, hiding the attack.
+Decision: a reset is now a full 16-byte frame, `A5 C3` + body. Its Seq_Num field carries a session epoch, and its tag uses a separate reset key. `top_zedboard.v` accepts it only if the tag is valid and the epoch is higher than the last accepted epoch. Otherwise it logs `RST DENIED` and changes nothing. BTNC still resets, because it needs physical access.
+Alternatives: a button-only reset is the most secure, but every automated test session would need a person at the board.
+Trade-off: the last epoch is cleared at power-on, so after a power cycle an old reset frame is accepted once. A power cycle already clears all replay state, so this adds no new weakness. A session still reuses the same data key, so old packets become acceptable after any legitimate reset. That is inherent in resetting without changing keys, and the specification states it.
 
 ## Stale-packet scenario differs from the specification's literal trace
 
@@ -87,12 +88,12 @@ Date: 2026-10-25
 Context: the specification sends 40 and then 1 in a fresh session and expects the strict engine to reject 1. In a fresh session the strict engine still expects 1, so it would accept it.
 Decision: `host/scenarios.py` sends 1, then W + 8, then 1 again. Both engines then reject the final packet, as the specification's table intends.
 
-## Host waits for each telemetry line
+## Telemetry event queue (replaces dropping events while busy)
 
-Date: 2026-10-25
-Context: a verdict line takes about 5 ms to send, and a new frame can arrive every 1.5 ms.
-Decision: `telemetry.v` sends one line at a time and drops events that arrive while busy. `demo.py` and `tb_top.sv` wait for each line before sending more. `CNT` reveals any dropped line.
-Alternatives: an event FIFO in hardware. It would add memory and logic unrelated to the comparison being measured.
+Date: 2026-10-27
+Context: a verdict line takes about 10 ms to send, and a frame can arrive every 1.6 ms. The first design dropped any event that arrived while a line was being sent. A review showed that this could silently hide a reset.
+Decision: `telemetry.v` puts every event in a 16-entry queue and sends the lines in order. Button and parser-error events wait in a flag until the queue's write port is free. If the queue is ever full, a `LOST EVENTS` line follows.
+Trade-off: about 160 extra flip-flops or LUT-RAM bits per entry. The log is now complete for bursts of up to 16 frames, which `tb_top` and `demo.py` check with back-to-back frames.
 
 ## Simulate with xsim, not Icarus Verilog
 
@@ -106,11 +107,19 @@ Date: 2026-10-25
 Context: the project folder name contains spaces. Vivado split an absolute path at a space and failed to find the constraints file.
 Decision: `build.tcl` and `program.tcl` change into the repository root and use relative paths.
 
+## Follow RCPROJECT.pdf where it asks for more than the plan
+
+Date: 2026-10-27
+Context: the Markdown plan allowed reporting both engine verdicts without choosing one. The group proposal, `RCPROJECT.pdf`, asks to accept or forward a packet only if authentication and the selected check pass, and to report accepted and rejected counts.
+Decision: `decision_control.v` takes the policy from slide switch SW0 and produces one final verdict. Only a final accept executes the payload as a command (OPEN, CLOSE or STATUS), which drives a door state. It keeps per-engine accepted and rejected counts as four-digit BCD counters, so telemetry and the OLED print them in decimal without a divider.
+Alternatives: a build-time policy setting needs a rebuild to change policy. A switch lets the demonstration show both policies live.
+Trade-off: both engines still run on every packet, so the comparison is kept.
+
 ## Keep module boundaries for the measured modules
 
 Date: 2026-10-25
 Context: the first W=64 build reported 1 LUT for the strict counter. Vivado had moved its compare logic into neighbouring modules. The totals were right, but the per-engine numbers were not usable for comparison.
-Decision: `top_zedboard.v` marks `u_auth`, `u_strict` and `u_window` with `keep_hierarchy`.
+Decision: `top_zedboard.v` marks `u_auth`, `u_strict`, `u_window` and `u_decide` with `keep_hierarchy`.
 Trade-off: Vivado can no longer merge logic across those three boundaries, so the total may grow slightly. Accepted because the per-engine cost is the quantity this project compares.
 
 ## Design without the PS7 block

@@ -2,6 +2,29 @@
 
 ## 2026-10-27
 
+### rtl/frame_parser.v, rtl/auth_stage.v, rtl/siphash24.v, rtl/top_zedboard.v
+Replaced the unsigned `A5 C3` reset with a signed reset frame. It carries a session epoch and a tag made with a separate reset key. The FPGA accepts it only with a valid tag and a higher epoch, otherwise it logs `RST DENIED` and changes nothing. SipHash now takes its key as an input.
+Reason: a review showed that the unsigned reset let anyone wipe replay state and replay an old packet, and that the reset's log line could be dropped.
+
+### rtl/telemetry.v
+Events now go into a 16-entry queue, so no reset or verdict line is dropped while another line is being sent. Verdict lines add CMD, POL, RES, DOOR and per-engine accepted/rejected counts.
+
+### rtl/decision_control.v (new), constraints/zedboard_base.xdc, rtl/top_zedboard_ps.v
+Added the Decision & Control block from RCPROJECT.pdf. Slide switch SW0 selects the policy, the block produces one final verdict, executes OPEN and CLOSE commands only on a final accept, and counts accepted and rejected packets per engine. Added the SW0 pin.
+Impact: core latency is 13 clocks from frame to final decision, one more than before.
+
+### rtl/oled_status.v, sim/tb_oled.sv
+OLED screens now follow the PDF layout (CMD, AUTH, POLICY, RESULT), with a summary screen for counts and door state and screens for signed, button and denied resets.
+
+### host/packet.py, host/replay_model.py, host/scenarios.py, host/session.py (new), host/telemetry.py, host/gen_vectors.py, host/demo.py, tests/test_models.py
+The golden model gains the policy, final verdict, door, counters and reset rules. New scenarios cover a replayed OPEN command, forged and replayed resets, a back-to-back burst and Device_ID tampering. `session.py` turns steps into frames and expected lines for both simulation and the demo. Simulation expectations are written per policy. 35 Python tests pass.
+
+### sim/tb_top.sv, scripts/run_sim.py, scripts/build.py
+`tb_top` runs with SW0 down and up and treats `?` in expected lines as a wildcard. All 15 simulations pass for W = 16, 32, 64 and 128. `reports/summary.md` gains a critical-path location column and the decision block's size.
+
+### README.md, Flow.md, Decisions.md
+Rewrote the README for the new design and stated plainly that only the `ps` variant has run on hardware. Recorded the signed reset, the queue and the PDF-driven decision block, and fixed a stale file name.
+
 ### rtl/oled_status.v, rtl/oled_ssd1306.v, rtl/font8x8_rom.v, host/gen_font.py, sim/tb_oled.sv
 Added the on-board OLED display. It shows boot, idle, each packet's stages, reset, frame errors and the final PASS or FAIL as text.
 `tb_oled` decodes the SPI output back into text and caught two bugs before hardware. A one-bit shift came from the testbench decoder. A skipped first pixel column came from the driver.

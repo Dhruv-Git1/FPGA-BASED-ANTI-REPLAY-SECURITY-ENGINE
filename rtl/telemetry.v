@@ -1,49 +1,140 @@
 // ASCII telemetry over UART TX. One line per event (format in host/telemetry.py):
-//   SEQ=00000004 MAC=1 STR=0 WIN=1 WR=NEW LAT=000D CNT=0005\r\n
-//   RST\r\n
-//   ERR\r\n
-// Event fields are copied into a snapshot when the line starts. A line takes
-// about 5 ms at 115200 baud, and an event that arrives while a line is still
-// being sent is dropped. The host therefore waits for each line before sending
-// the next frame. CNT lets the host notice a dropped verdict line.
+//   SEQ=00000004 CMD=0001 MAC=1 STR=0 WIN=1 WR=NEW POL=SW RES=ACC DOOR=O LAT=000D CNT=0005 SC=0003/0001 SW=0004/0000
+//   RST EPOCH=0000000A POL=SC      signed reset accepted
+//   RST DENIED                     reset with a bad tag or an epoch that is not higher
+//   RST BUTTON                     BTNC pressed
+//   ERR                            frame cut off or broken byte
+//   LOST EVENTS                    the queue was full and at least one event was dropped
+//
+// A line takes up to 10 ms at 115200 baud, while frames can arrive every 1.6 ms.
+// Events therefore go into a 16-entry queue and are sent in order, so a burst of
+// frames, or a reset arriving while a line is being sent, is never lost from the
+// log. Verdicts and signed-reset results come from the authentication path, at
+// most one per frame. Button and parser-error events are rarer and wait in a
+// one-bit flag until the queue's write port is free.
 module telemetry #(
     parameter CLKS_PER_BIT = 868
 ) (
     input  wire        clk,
     input  wire        rst,
+    // verdict, from decision_control
     input  wire        verdict_valid,
     input  wire [31:0] seq,
+    input  wire [15:0] cmd,
     input  wire        mac_ok,
     input  wire        strict_accept,
     input  wire        window_accept,
     input  wire [2:0]  window_reason,
+    input  wire        policy,
+    input  wire        final_accept,
+    input  wire        door_open,
     input  wire [15:0] latency,
     input  wire [15:0] count,
-    input  wire        reset_event,
+    input  wire [15:0] sc_acc,
+    input  wire [15:0] sc_rej,
+    input  wire [15:0] sw_acc,
+    input  wire [15:0] sw_rej,
+    // other events
+    input  wire        reset_ok,        // signed reset accepted; epoch is on `seq`
+    input  wire        reset_denied,
+    input  wire        reset_button,
     input  wire        error_event,
     output wire        tx
 );
-    localparam [1:0] T_VERDICT = 2'd0, T_RST = 2'd1, T_ERR = 2'd2;
-    localparam [1:0] S_IDLE = 2'd0, S_SEND = 2'd1, S_WAIT = 2'd2;
-    localparam [5:0] VERDICT_LEN = 6'd57, SHORT_LEN = 6'd5;
+    localparam [2:0] K_VERDICT = 3'd0, K_RST_OK = 3'd1, K_RST_NO = 3'd2,
+                     K_RST_BTN = 3'd3, K_ERR = 3'd4, K_LOST = 3'd5;
+    localparam EW = 156;  // queue entry width, see pack below
+    localparam LINE_CHARS = 112;
 
-    reg [1:0]  state;
-    reg [1:0]  kind;
-    reg [5:0]  idx;
-    reg [31:0] s_seq;
-    reg        s_mac, s_str, s_win;
-    reg [2:0]  s_reason;
-    reg [15:0] s_lat, s_cnt;
-    reg        tx_start;
-    reg [7:0]  ch;
-    wire       tx_done;
-    wire       tx_busy;
+    // ---- event queue --------------------------------------------------------
+    reg [EW-1:0] fifo [0:15];
+    reg [4:0]    wr_ptr, rd_ptr;
+    wire         empty = (wr_ptr == rd_ptr);
+    wire         full  = (wr_ptr[3:0] == rd_ptr[3:0]) && (wr_ptr[4] != rd_ptr[4]);
+    reg          pend_btn, pend_err, pend_lost;
+    reg          rd_en;
+
+    function [EW-1:0] pack;
+        input [2:0] kind;
+        pack = {kind, seq, cmd, mac_ok, strict_accept, window_accept, policy, final_accept,
+                door_open, window_reason, latency, count, sc_acc, sc_rej, sw_acc, sw_rej};
+    endfunction
+
+    reg          wr_en;
+    reg [EW-1:0] wr_data;
+    always @(*) begin
+        wr_en   = 1'b1;
+        wr_data = pack(K_VERDICT);
+        if (verdict_valid)     wr_data = pack(K_VERDICT);
+        else if (reset_ok)     wr_data = pack(K_RST_OK);
+        else if (reset_denied) wr_data = pack(K_RST_NO);
+        else if (pend_btn)     wr_data = pack(K_RST_BTN);
+        else if (pend_err)     wr_data = pack(K_ERR);
+        else if (pend_lost)    wr_data = pack(K_LOST);
+        else                   wr_en   = 1'b0;
+    end
+    wire primary = verdict_valid | reset_ok | reset_denied;
+
+    always @(posedge clk) begin
+        if (rst) begin
+            wr_ptr    <= 5'd0;
+            rd_ptr    <= 5'd0;
+            pend_btn  <= 1'b0;
+            pend_err  <= 1'b0;
+            pend_lost <= 1'b0;
+        end else begin
+            if (wr_en && !full) begin
+                fifo[wr_ptr[3:0]] <= wr_data;
+                wr_ptr <= wr_ptr + 5'd1;
+            end
+            // Flags: set by their event, cleared once their entry is written.
+            if (reset_button) pend_btn <= 1'b1;
+            else if (!primary && pend_btn && !full) pend_btn <= 1'b0;
+            if (error_event) pend_err <= 1'b1;
+            else if (!primary && !pend_btn && pend_err && !full) pend_err <= 1'b0;
+            // Only authentication-path events are dropped when full. Flags just wait.
+            if (primary && full) pend_lost <= 1'b1;
+            else if (!primary && !pend_btn && !pend_err && pend_lost && !full) pend_lost <= 1'b0;
+            if (rd_en)
+                rd_ptr <= rd_ptr + 5'd1;
+        end
+    end
+
+    // ---- line formatting ----------------------------------------------------
+    reg [EW-1:0] cur;
+    wire [2:0]  c_kind   = cur[155:153];
+    wire [31:0] c_seq    = cur[152:121];
+    wire [15:0] c_cmd    = cur[120:105];
+    wire        c_mac    = cur[104];
+    wire        c_str    = cur[103];
+    wire        c_win    = cur[102];
+    wire        c_pol    = cur[101];
+    wire        c_fin    = cur[100];
+    wire        c_door   = cur[99];
+    wire [2:0]  c_reason = cur[98:96];
+    wire [15:0] c_lat    = cur[95:80];
+    wire [15:0] c_cnt    = cur[79:64];
+    wire [15:0] c_sca    = cur[63:48];
+    wire [15:0] c_scr    = cur[47:32];
+    wire [15:0] c_swa    = cur[31:16];
+    wire [15:0] c_swr    = cur[15:0];
 
     function [7:0] hex;
         input [3:0] n;
         hex = (n < 4'd10) ? (8'h30 + n) : (8'h37 + n);  // '0'..'9', 'A'..'F'
     endfunction
-
+    function [31:0] hex4;
+        input [15:0] v;
+        hex4 = {hex(v[15:12]), hex(v[11:8]), hex(v[7:4]), hex(v[3:0])};
+    endfunction
+    function [63:0] hex8;
+        input [31:0] v;
+        hex8 = {hex4(v[31:16]), hex4(v[15:0])};
+    endfunction
+    function [31:0] bcd4;  // four BCD digits as text
+        input [15:0] v;
+        bcd4 = {8'h30 + v[15:12], 8'h30 + v[11:8], 8'h30 + v[7:4], 8'h30 + v[3:0]};
+    endfunction
     function [23:0] reason_text;
         input [2:0] r;
         case (r)
@@ -55,82 +146,81 @@ module telemetry #(
         endcase
     endfunction
 
-    wire [23:0] rtext = reason_text(s_reason);
+    wire [15:0] pol_text = c_pol ? "SW" : "SC";
 
-    // Character at position idx of the current line.
+    // Each line is left-aligned in a LINE_CHARS-character vector.
+    reg [8*LINE_CHARS-1:0] line;
+    reg [6:0]              line_len;
     always @(*) begin
-        if (kind != T_VERDICT) begin
-            case (idx)
-                6'd0:    ch = (kind == T_RST) ? "R" : "E";
-                6'd1:    ch = (kind == T_RST) ? "S" : "R";
-                6'd2:    ch = (kind == T_RST) ? "T" : "R";
-                6'd3:    ch = 8'h0D;
-                default: ch = 8'h0A;
-            endcase
-        end else begin
-            case (idx)
-                6'd0:  ch = "S";  6'd1:  ch = "E";  6'd2:  ch = "Q";  6'd3:  ch = "=";
-                6'd4:  ch = hex(s_seq[31:28]);  6'd5:  ch = hex(s_seq[27:24]);
-                6'd6:  ch = hex(s_seq[23:20]);  6'd7:  ch = hex(s_seq[19:16]);
-                6'd8:  ch = hex(s_seq[15:12]);  6'd9:  ch = hex(s_seq[11:8]);
-                6'd10: ch = hex(s_seq[7:4]);    6'd11: ch = hex(s_seq[3:0]);
-                6'd12: ch = " "; 6'd13: ch = "M"; 6'd14: ch = "A"; 6'd15: ch = "C"; 6'd16: ch = "=";
-                6'd17: ch = s_mac ? "1" : "0";
-                6'd18: ch = " "; 6'd19: ch = "S"; 6'd20: ch = "T"; 6'd21: ch = "R"; 6'd22: ch = "=";
-                6'd23: ch = s_str ? "1" : "0";
-                6'd24: ch = " "; 6'd25: ch = "W"; 6'd26: ch = "I"; 6'd27: ch = "N"; 6'd28: ch = "=";
-                6'd29: ch = s_win ? "1" : "0";
-                6'd30: ch = " "; 6'd31: ch = "W"; 6'd32: ch = "R"; 6'd33: ch = "=";
-                6'd34: ch = rtext[23:16]; 6'd35: ch = rtext[15:8]; 6'd36: ch = rtext[7:0];
-                6'd37: ch = " "; 6'd38: ch = "L"; 6'd39: ch = "A"; 6'd40: ch = "T"; 6'd41: ch = "=";
-                6'd42: ch = hex(s_lat[15:12]); 6'd43: ch = hex(s_lat[11:8]);
-                6'd44: ch = hex(s_lat[7:4]);   6'd45: ch = hex(s_lat[3:0]);
-                6'd46: ch = " "; 6'd47: ch = "C"; 6'd48: ch = "N"; 6'd49: ch = "T"; 6'd50: ch = "=";
-                6'd51: ch = hex(s_cnt[15:12]); 6'd52: ch = hex(s_cnt[11:8]);
-                6'd53: ch = hex(s_cnt[7:4]);   6'd54: ch = hex(s_cnt[3:0]);
-                6'd55: ch = 8'h0D;
-                default: ch = 8'h0A;
-            endcase
-        end
+        case (c_kind)
+            K_VERDICT: begin
+                line = {"SEQ=", hex8(c_seq), " CMD=", hex4(c_cmd),
+                        " MAC=", c_mac ? "1" : "0", " STR=", c_str ? "1" : "0",
+                        " WIN=", c_win ? "1" : "0", " WR=", reason_text(c_reason),
+                        " POL=", pol_text, " RES=", c_fin ? "ACC" : "REJ",
+                        " DOOR=", c_door ? "O" : "C", " LAT=", hex4(c_lat), " CNT=", hex4(c_cnt),
+                        " SC=", bcd4(c_sca), "/", bcd4(c_scr), " SW=", bcd4(c_swa), "/", bcd4(c_swr)};
+                line_len = 7'd112;
+            end
+            K_RST_OK: begin
+                line = {"RST EPOCH=", hex8(c_seq), " POL=", pol_text, {(LINE_CHARS - 25){8'h20}}};
+                line_len = 7'd25;
+            end
+            K_RST_NO: begin
+                line = {"RST DENIED", {(LINE_CHARS - 10){8'h20}}};
+                line_len = 7'd10;
+            end
+            K_RST_BTN: begin
+                line = {"RST BUTTON", {(LINE_CHARS - 10){8'h20}}};
+                line_len = 7'd10;
+            end
+            K_ERR: begin
+                line = {"ERR", {(LINE_CHARS - 3){8'h20}}};
+                line_len = 7'd3;
+            end
+            default: begin
+                line = {"LOST EVENTS", {(LINE_CHARS - 11){8'h20}}};
+                line_len = 7'd11;
+            end
+        endcase
     end
 
-    wire [5:0] line_len = (kind == T_VERDICT) ? VERDICT_LEN : SHORT_LEN;
+    // ---- sender -------------------------------------------------------------
+    localparam [1:0] S_IDLE = 2'd0, S_SEND = 2'd1, S_WAIT = 2'd2;
+    reg [1:0] state;
+    reg [6:0] idx;
+    reg       tx_start;
+    reg [7:0] ch;
+    wire      tx_done, tx_busy;
+
+    always @(*) begin
+        if (idx < line_len)       ch = line[8 * (LINE_CHARS - 1 - idx) +: 8];
+        else if (idx == line_len) ch = 8'h0D;
+        else                      ch = 8'h0A;
+    end
 
     always @(posedge clk) begin
         tx_start <= 1'b0;
+        rd_en    <= 1'b0;
         if (rst) begin
             state <= S_IDLE;
         end else begin
             case (state)
-                S_IDLE: begin
-                    idx <= 6'd0;
-                    if (verdict_valid) begin
-                        kind     <= T_VERDICT;
-                        s_seq    <= seq;
-                        s_mac    <= mac_ok;
-                        s_str    <= strict_accept;
-                        s_win    <= window_accept;
-                        s_reason <= window_reason;
-                        s_lat    <= latency;
-                        s_cnt    <= count;
-                        state    <= S_SEND;
-                    end else if (reset_event) begin
-                        kind  <= T_RST;
-                        state <= S_SEND;
-                    end else if (error_event) begin
-                        kind  <= T_ERR;
-                        state <= S_SEND;
-                    end
+                S_IDLE: if (!empty && !rd_en) begin
+                    cur   <= fifo[rd_ptr[3:0]];
+                    rd_en <= 1'b1;
+                    idx   <= 7'd0;
+                    state <= S_SEND;
                 end
                 S_SEND: begin
                     tx_start <= 1'b1;
                     state    <= S_WAIT;
                 end
                 default: if (tx_done) begin
-                    if (idx == line_len - 6'd1) begin
+                    if (idx == line_len + 7'd1) begin
                         state <= S_IDLE;
                     end else begin
-                        idx   <= idx + 6'd1;
+                        idx   <= idx + 7'd1;
                         state <= S_SEND;
                     end
                 end

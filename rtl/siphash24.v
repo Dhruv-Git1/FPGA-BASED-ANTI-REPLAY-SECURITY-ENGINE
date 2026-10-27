@@ -8,14 +8,14 @@
 // same clock edge, so `done` pulses 8 clocks after `start`.
 //
 // `m` must already be the little-endian load of the 8 message bytes, as the
-// SipHash specification defines it. `tag` is the 64-bit SipHash output word.
-module siphash24 #(
-    parameter [63:0] K0 = 64'h0706050403020100,  // key bytes 00..07, little-endian
-    parameter [63:0] K1 = 64'h0f0e0d0c0b0a0908   // key bytes 08..0f, little-endian
-) (
+// SipHash specification defines it. `k0` and `k1` are the key halves, each a
+// little-endian load of 8 key bytes. `tag` is the 64-bit SipHash output word.
+module siphash24 (
     input  wire        clk,
     input  wire        rst,
     input  wire        start,
+    input  wire [63:0] k0,
+    input  wire [63:0] k1,
     input  wire [63:0] m,
     output reg         busy,
     output reg         done,
@@ -56,10 +56,10 @@ module siphash24 #(
         if (rst) begin
             busy <= 1'b0;
         end else if (start && !busy) begin
-            v0    <= K0 ^ 64'h736f6d6570736575;
-            v1    <= K1 ^ 64'h646f72616e646f6d;
-            v2    <= K0 ^ 64'h6c7967656e657261;
-            v3    <= K1 ^ 64'h7465646279746573 ^ m;
+            v0    <= k0 ^ 64'h736f6d6570736575;
+            v1    <= k1 ^ 64'h646f72616e646f6d;
+            v2    <= k0 ^ 64'h6c7967656e657261;
+            v3    <= k1 ^ 64'h7465646279746573 ^ m;
             m_r   <= m;
             phase <= PH_MSG;
             rnd   <= 2'd0;

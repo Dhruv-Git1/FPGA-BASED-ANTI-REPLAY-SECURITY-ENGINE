@@ -12,9 +12,12 @@ module tb_oled;
     logic        clk = 0, rst = 1;
     logic        verdict_valid = 0, mac_ok = 0, strict_accept = 0, window_accept = 0;
     logic [2:0]  window_reason = 0;
+    logic        policy_used = 0, final_accept = 0, door_open = 0, policy_live = 0;
+    logic [15:0] cmd = 0;
     logic [31:0] seq = 0;
-    logic [15:0] latency = 12;
-    logic        session_clear = 0, parse_err = 0, host_pass = 0, host_fail = 0;
+    logic [15:0] sc_acc = 0, sc_rej = 0, sw_acc = 0, sw_rej = 0;
+    logic        reset_ok = 0, reset_button = 0, reset_denied = 0;
+    logic        parse_err = 0, host_pass = 0, host_fail = 0;
     logic [1:0]  row;
     logic [3:0]  col;
     logic [6:0]  ch;
@@ -26,9 +29,12 @@ module tb_oled;
     oled_status #(.W(64), .TICK_CYCLES(TICK), .STAGE_TICKS(3)) u_status (
         .clk(clk), .rst(rst), .verdict_valid(verdict_valid), .mac_ok(mac_ok),
         .strict_accept(strict_accept), .window_accept(window_accept),
-        .window_reason(window_reason), .seq(seq), .latency(latency),
-        .session_clear(session_clear), .parse_err(parse_err),
-        .host_pass(host_pass), .host_fail(host_fail), .row(row), .col(col), .ch(ch));
+        .window_reason(window_reason), .policy_used(policy_used), .final_accept(final_accept),
+        .cmd(cmd), .seq(seq), .door_open(door_open), .policy_live(policy_live),
+        .sc_acc(sc_acc), .sc_rej(sc_rej), .sw_acc(sw_acc), .sw_rej(sw_rej),
+        .reset_ok(reset_ok), .reset_button(reset_button), .reset_denied(reset_denied),
+        .parse_err(parse_err), .host_pass(host_pass), .host_fail(host_fail),
+        .row(row), .col(col), .ch(ch));
 
     oled_ssd1306 #(.SPI_HALF(1), .DELAY_1MS(D1), .DELAY_100MS(D100)) u_oled (
         .clk(clk), .rst(rst), .row(row), .col(col), .ch(ch),
@@ -124,19 +130,13 @@ module tb_oled;
         repeat (n * TICK) @(posedge clk);
     endtask
 
-    task automatic verdict(logic m, s, w, logic [2:0] r, logic [31:0] q);
-        mac_ok = m; strict_accept = s; window_accept = w; window_reason = r; seq = q;
+    // mac, strict, window, reason, policy (0 SC / 1 SW), final, command, sequence
+    task automatic verdict(logic m, s, w, logic [2:0] r, logic pol, fin, logic [15:0] c,
+                           logic [31:0] q);
+        mac_ok = m; strict_accept = s; window_accept = w; window_reason = r;
+        policy_used = pol; final_accept = fin; cmd = c; seq = q;
         pulse(verdict_valid);
     endtask
-
-    // Safety net: a stuck handshake must fail the test, not hang it.
-    initial begin
-        #200ms;
-        $display("FAIL: timeout. frames=%0d cmds=%0d vdd_n=%b res_n=%b vbat_n=%b",
-                 frames, n_cmds, vdd_n, res_n, vbat_n);
-        $display("RESULT: FAIL");
-        $finish;
-    end
 
     initial begin
         for (int code = 0; code < 128; code++)
@@ -164,32 +164,46 @@ module tb_oled;
 
         expect_screen("boot", "ANTI-REPLAY FPGA", "MAC: SIPHASH-2-4", "*", "WINDOW SIZE  64 ");
         wait_ticks(17);
-        expect_screen("idle", "ANTI-REPLAY FPGA", "STATUS: READY   ", "WINDOW SIZE  64 ", "PACKETS   0000  ");
+        sc_acc = 16'h0012; sc_rej = 16'h0003; sw_acc = 16'h0014; sw_rej = 16'h0001;
+        expect_screen("summary", "POLICY SC  W= 64", "DOOR CLOSED     ", "SC +0012 -0003  ", "SW +0014 -0001  ");
 
-        // Accepted by the window, rejected by strict. First only the RX line shows.
-        verdict(1, 0, 1, 3'd0, 32'h4);
-        expect_screen("walk stage 0", "RX  SEQ=00000004", "                ", "                ", "                ");
+        // Out of order under SW: strict says no, window says yes, final accept.
+        // First only the CMD line shows, then one line per stage.
+        verdict(1, 0, 1, 3'd0, 1, 1, 16'h0001, 32'h4);
+        expect_screen("walk stage 0", "CMD: OPEN   0004", "                ", "                ", "                ");
         wait_ticks(13);
-        expect_screen("out of order", "RX  SEQ=00000004", "AUTH OK   12 CLK", "STRICT: REJECT  ", "WINDOW: OK NEW  ");
+        expect_screen("accept", "CMD: OPEN   0004", "AUTH: PASS      ", "POLICY: SW S- W+", "RESULT: ACCEPT  ");
 
-        verdict(1, 1, 1, 3'd1, 32'h3);
+        verdict(1, 0, 1, 3'd0, 0, 0, 16'h0002, 32'h4);
         wait_ticks(13);
-        expect_screen("late", "RX  SEQ=00000003", "AUTH OK   12 CLK", "STRICT: ACCEPT  ", "WINDOW: OK LATE ");
+        expect_screen("strict reject", "CMD: CLOSE  0004", "AUTH: PASS      ", "POLICY: SC S- W+", "RESULT: REJ SEQ ");
 
-        verdict(1, 0, 0, 3'd2, 32'h3);
+        verdict(1, 0, 0, 3'd2, 1, 0, 16'h0003, 32'h3);
         wait_ticks(13);
-        expect_screen("replay", "RX  SEQ=00000003", "AUTH OK   12 CLK", "STRICT: REJECT  ", "WINDOW: REPLAY! ");
+        expect_screen("replay", "CMD: STATUS 0003", "*", "POLICY: SW S- W-", "RESULT: REJ DUP ");
 
-        verdict(0, 0, 0, 3'd4, 32'h000F4240);
+        verdict(1, 0, 0, 3'd3, 1, 0, 16'h1234, 32'h1);
         wait_ticks(13);
-        expect_screen("tampered", "RX  SEQ=000F4240", "AUTH FAILED!    ", "STRICT UNCHANGED", "WINDOW UNCHANGED");
+        expect_screen("stale", "CMD: DATA   0001", "*", "*", "RESULT: REJ OLD ");
 
-        verdict(1, 0, 0, 3'd3, 32'h1);
+        verdict(0, 0, 0, 3'd4, 1, 0, 16'h0001, 32'h000F4240);
         wait_ticks(13);
-        expect_screen("stale", "*", "*", "*", "WINDOW: TOO OLD ");
+        expect_screen("tampered", "CMD: OPEN   4240", "AUTH: FAIL      ", "POLICY: SW S- W-", "RESULT: REJ AUTH");
 
-        pulse(session_clear);
-        expect_screen("reset", "SESSION RESET   ", "STRICT EXPECTS 1", "WINDOW CLEARED  ", "PACKETS   0005  ");
+        // The verdict stays 3 s, then the summary returns with live values.
+        door_open = 1; policy_live = 1;
+        wait_ticks(26);
+        expect_screen("summary again", "POLICY SW  W= 64", "DOOR OPEN       ", "*", "*");
+
+        seq = 32'h0000000A;
+        pulse(reset_ok);
+        expect_screen("signed reset", "SESSION RESET   ", "EPOCH 0000000A  ", "SIGNED TAG OK   ", "COUNTERS CLEARED");
+
+        pulse(reset_button);
+        expect_screen("button reset", "SESSION RESET   ", "BY BUTTON BTNC  ", "                ", "COUNTERS CLEARED");
+
+        pulse(reset_denied);
+        expect_screen("denied reset", "RESET DENIED!   ", "BAD TAG OR OLD  ", "STATE UNCHANGED ", "POSSIBLE ATTACK ");
 
         pulse(parse_err);
         expect_screen("frame error", "FRAME ERROR     ", "BAD BYTE OR GAP ", "FRAME DISCARDED ", "WAITING FOR A55A");

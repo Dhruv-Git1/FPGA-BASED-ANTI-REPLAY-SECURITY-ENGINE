@@ -1,8 +1,9 @@
 // Frame parser: turns the UART byte stream into 16-byte packets.
 //
-//   A5 5A + 16 bytes  -> frame_valid pulse with the packet in `frame`
-//   A5 C3             -> reset_req pulse (start a new replay test session)
-//   A5 E1 / A5 E0     -> host_pass / host_fail pulse (LED display only, no state change)
+//   A5 5A + 16 bytes  -> frame_valid pulse, frame_is_reset = 0 (data packet)
+//   A5 C3 + 16 bytes  -> frame_valid pulse, frame_is_reset = 1 (signed reset request)
+//   A5 E1 / A5 E0     -> host_pass / host_fail pulse (display only, no state change)
+// The parser never acts on a reset itself. auth_stage checks its tag first.
 //
 // While a frame body is being collected, a UART framing error or a gap longer
 // than TIMEOUT_CYCLES abandons the frame, pulses parse_err and goes back to
@@ -17,7 +18,7 @@ module frame_parser #(
     input  wire         byte_err,
     output reg          frame_valid,
     output reg  [127:0] frame,
-    output reg          reset_req,
+    output reg          frame_is_reset,
     output reg          host_pass,
     output reg          host_fail,
     output reg          parse_err
@@ -30,7 +31,6 @@ module frame_parser #(
 
     always @(posedge clk) begin
         frame_valid <= 1'b0;
-        reset_req   <= 1'b0;
         host_pass   <= 1'b0;
         host_fail   <= 1'b0;
         parse_err   <= 1'b0;
@@ -45,12 +45,10 @@ module frame_parser #(
             case (state)
                 S_SYNC0: if (byte_data == 8'hA5) state <= S_SYNC1;
                 S_SYNC1: begin
-                    if (byte_data == 8'h5A) begin
-                        state <= S_DATA;
-                        count <= 4'd0;
-                    end else if (byte_data == 8'hC3) begin
-                        reset_req <= 1'b1;
-                        state     <= S_SYNC0;
+                    if (byte_data == 8'h5A || byte_data == 8'hC3) begin
+                        state          <= S_DATA;
+                        count          <= 4'd0;
+                        frame_is_reset <= (byte_data == 8'hC3);
                     end else if (byte_data == 8'hE1) begin
                         host_pass <= 1'b1;
                         state     <= S_SYNC0;

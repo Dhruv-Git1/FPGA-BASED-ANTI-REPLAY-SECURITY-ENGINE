@@ -35,6 +35,7 @@ module top_zedboard_ps #(
     // FPGA logic pins, as in top_zedboard.
     input  wire        clk,
     input  wire        btn_c,
+    input  wire        sw_policy,
     output wire [7:0]  led,
     output wire        oled_sdin,
     output wire        oled_sclk,
@@ -60,7 +61,7 @@ module top_zedboard_ps #(
     );
 
     top_zedboard #(.W(W)) u_core (
-        .clk(clk), .btn_c(btn_c),
+        .clk(clk), .btn_c(btn_c), .sw_policy(sw_policy),
         .uart_rx(ps_uart_tx), .uart_tx(ps_uart_rx),
         .led(led),
         .oled_sdin(oled_sdin), .oled_sclk(oled_sclk), .oled_dc(oled_dc),

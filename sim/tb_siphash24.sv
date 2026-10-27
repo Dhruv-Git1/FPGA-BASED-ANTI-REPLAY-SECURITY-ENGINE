@@ -18,7 +18,9 @@ module tb_siphash24;
 
     always #5 clk = ~clk;
 
-    siphash24 dut (.clk(clk), .rst(rst), .start(start), .m(m), .busy(busy), .done(done), .tag(tag));
+    siphash24 dut (.clk(clk), .rst(rst), .start(start),
+                   .k0(64'h0706050403020100), .k1(64'h0f0e0d0c0b0a0908),
+                   .m(m), .busy(busy), .done(done), .tag(tag));
 
     function automatic [63:0] bswap64(input [63:0] x);
         for (int i = 0; i < 8; i++) bswap64[8*i +: 8] = x[8*(7-i) +: 8];

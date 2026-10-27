@@ -1,12 +1,13 @@
-"""Golden models of the two replay engines and of the FPGA's verdict.
+"""Golden models of the two replay engines and of the FPGA's decision logic.
 
-These follow section 5 of the project specification. The RTL in
-rtl/strict_counter.v and rtl/sliding_window.v must make the same decisions.
+These follow section 5 of the project specification and section 4.5 of
+RCPROJECT.pdf. The RTL in rtl/strict_counter.v, rtl/sliding_window.v and
+rtl/decision_control.v must make the same decisions.
 """
 
 from dataclasses import dataclass
 
-from packet import Packet, is_authentic
+from packet import CMD_CLOSE, CMD_OPEN, Packet, ResetPacket, is_authentic, reset_is_authentic
 
 STRICT_INITIAL_SEQ = 1
 
@@ -16,6 +17,9 @@ INW = "INW"  # older than S_max, inside the window, not seen before
 DUP = "DUP"  # inside the window, already seen
 STL = "STL"  # too old, outside the window
 AUT = "AUT"  # authentication failed, state untouched
+
+# Policy selected by switch SW0: 0 = strict counter, 1 = sliding window.
+SC, SW = "SC", "SW"
 
 
 class StrictCounter:
@@ -62,27 +66,71 @@ class SlidingWindow:
 
 
 @dataclass(frozen=True)
+class Counts:
+    sc_acc: int = 0
+    sc_rej: int = 0
+    sw_acc: int = 0
+    sw_rej: int = 0
+
+
+@dataclass(frozen=True)
 class Verdict:
     seq: int
+    cmd: int
     mac_ok: bool
     strict_accept: bool
     window_accept: bool
     window_reason: str
+    policy: str
+    final_accept: bool
+    door_open: bool
+    counts: Counts
+
+
+@dataclass(frozen=True)
+class ResetResult:
+    accepted: bool
+    epoch: int
 
 
 class AntiReplayModel:
     """Model of the whole FPGA datapath after the frame parser."""
 
-    def __init__(self, w: int) -> None:
+    def __init__(self, w: int, policy: str = SC) -> None:
         self.w = w
-        self.reset()
+        self.policy = policy
+        self.last_epoch = 0      # cleared only by power-on
+        self.door_open = False   # the "device" the commands control; survives resets
+        self._clear_session()
 
-    def reset(self) -> None:
+    def _clear_session(self) -> None:
         self.strict = StrictCounter()
         self.window = SlidingWindow(self.w)
+        self.counts = Counts()
 
-    def process(self, pkt: Packet) -> Verdict:
+    def button_reset(self) -> None:
+        """BTNC: physical presence, so no tag is needed."""
+        self._clear_session()
+
+    def process_reset(self, rst: ResetPacket) -> ResetResult:
+        ok = reset_is_authentic(rst) and rst.epoch > self.last_epoch
+        if ok:
+            self.last_epoch = rst.epoch
+            self._clear_session()
+        return ResetResult(ok, rst.epoch)
+
+    def process(self, pkt: Packet, policy: str | None = None) -> Verdict:
+        pol = policy or self.policy
         mac_ok = is_authentic(pkt)
         s_ok = self.strict.check(pkt.seq, mac_ok)
         w_ok, reason = self.window.check(pkt.seq, mac_ok)
-        return Verdict(pkt.seq, mac_ok, s_ok, w_ok, reason)
+        final = s_ok if pol == SC else w_ok
+        if final and pkt.payload == CMD_OPEN:
+            self.door_open = True
+        elif final and pkt.payload == CMD_CLOSE:
+            self.door_open = False
+        c = self.counts
+        self.counts = Counts(c.sc_acc + s_ok, c.sc_rej + (not s_ok),
+                             c.sw_acc + w_ok, c.sw_rej + (not w_ok))
+        return Verdict(pkt.seq, pkt.payload, mac_ok, s_ok, w_ok, reason, pol, final,
+                       self.door_open, self.counts)

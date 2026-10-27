@@ -20,7 +20,8 @@ REL_ROOT = "../.."  # from WORK back to ROOT
 
 RTL = ["siphash24.v", "auth_stage.v", "strict_counter.v", "sliding_window.v",
        "uart_rx.v", "uart_tx.v", "frame_parser.v", "telemetry.v", "led_display.v",
-       "font8x8_rom.v", "oled_status.v", "oled_ssd1306.v", "top_zedboard.v"]
+       "font8x8_rom.v", "oled_status.v", "oled_ssd1306.v", "decision_control.v",
+       "top_zedboard.v"]
 TBS = ["tb_siphash24.sv", "tb_replay.sv", "tb_top.sv", "tb_led_display.sv", "tb_oled.sv"]
 
 
@@ -80,7 +81,9 @@ def main() -> None:
     for w in args.w:
         results[f"replay_W{w}"] = simulate("tb_replay", f"replay_W{w}", [f"W={w}"])
         if not args.skip_top:
-            results[f"top_W{w}"] = simulate("tb_top", f"top_W{w}", [f"W={w}"])
+            for pol in (0, 1):  # switch SW0 down (strict counter) and up (sliding window)
+                name = f"top_W{w}_{'SW' if pol else 'SC'}"
+                results[name] = simulate("tb_top", name, [f"W={w}", f"POLICY={pol}"])
 
     print("\n=== Summary")
     for name, ok in results.items():

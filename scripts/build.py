@@ -79,6 +79,7 @@ def summarize_one(w: int) -> dict | None:
         util = (rep / "impl_utilization.rpt").read_text()
         hier = (rep / "impl_utilization_hier.rpt").read_text()
         timing = (rep / "timing_summary.rpt").read_text()
+        paths = (rep / "critical_paths.rpt").read_text()
     except FileNotFoundError:
         return None
     # Design Timing Summary: header line with WNS(ns), a dashed line, then values.
@@ -87,8 +88,23 @@ def summarize_one(w: int) -> dict | None:
     window = {}
     for line in hier.splitlines():
         cells = [c.strip() for c in line.split("|")]
-        if len(cells) > 7 and cells[1] in ("u_window", "u_strict", "u_auth"):
+        if len(cells) > 7 and cells[1] in ("u_window", "u_strict", "u_auth", "u_decide"):
             window[cells[1]] = (cells[3], cells[7])  # Total LUTs, FFs
+    # Which module the worst path starts and ends in, so readers can tell an
+    # effect of W from placement noise.
+    src = re.search(r"Source:\s+(\S+)", paths)
+    dst = re.search(r"Destination:\s+(\S+)", paths)
+    where = "?"
+    if src and dst:
+        def owner(cell: str) -> str:
+            for key, name in (("u_sip", "SipHash"), ("u_window", "window"), ("u_strict", "strict"),
+                              ("u_decide", "decision"), ("u_auth", "auth"), ("u_tel", "telemetry"),
+                              ("u_oled", "OLED"), ("u_leds", "LEDs")):
+                if key in cell:
+                    return name
+            return "top"
+        a, b = owner(src.group(1)), owner(dst.group(1))
+        where = a if a == b else f"{a} to {b}"
     return {
         "W": w,
         "LUTs": table_value(util, "Slice LUTs"),
@@ -99,6 +115,8 @@ def summarize_one(w: int) -> dict | None:
         "window": window.get("u_window"),
         "strict": window.get("u_strict"),
         "auth": window.get("u_auth"),
+        "decide": window.get("u_decide"),
+        "where": where,
     }
 
 
@@ -112,16 +130,19 @@ def summarize(ws: list[int]) -> None:
         "",
         "Part xc7z020clg484-1, clock constraint 10.000 ns (100 MHz), same settings for every W.",
         "Estimated Fmax = 1 / (10 ns - WNS). It is derived from setup slack, not measured.",
+        "Each row is one placement run. When the critical path is not in the window logic,",
+        "differences in WNS and Fmax between rows are placement noise, not an effect of W.",
         "",
-        "| W | Total LUTs | Total FFs | Slices | WNS (ns) | Est. Fmax (MHz) "
-        "| Window LUTs | Window FFs | Strict LUTs | Strict FFs | Auth LUTs | Auth FFs |",
-        "|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+        "| W | Total LUTs | Total FFs | Slices | WNS (ns) | Est. Fmax (MHz) | Critical path "
+        "| Window LUTs | Window FFs | Strict LUTs | Strict FFs | Auth LUTs | Auth FFs "
+        "| Decision LUTs | Decision FFs |",
+        "|---:|---:|---:|---:|---:|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for r in rows:
-        win, st, au = r["window"] or ("?", "?"), r["strict"] or ("?", "?"), r["auth"] or ("?", "?")
+        win, st, au, de = (r[k] or ("?", "?") for k in ("window", "strict", "auth", "decide"))
         lines.append(f"| {r['W']} | {r['LUTs']} | {r['FFs']} | {r['Slices']} | {r['WNS_ns']} "
-                     f"| {r['Fmax_MHz']} | {win[0]} | {win[1]} | {st[0]} | {st[1]} "
-                     f"| {au[0]} | {au[1]} |")
+                     f"| {r['Fmax_MHz']} | {r['where']} | {win[0]} | {win[1]} | {st[0]} | {st[1]} "
+                     f"| {au[0]} | {au[1]} | {de[0]} | {de[1]} |")
     out = ROOT / "reports" / "summary.md"
     out.write_text("\n".join(lines) + "\n", newline="\n")
     print("\n".join(lines))
